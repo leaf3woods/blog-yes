@@ -1,4 +1,4 @@
-﻿namespace BlogYes.Domain.ValueObjects.Blog
+﻿namespace BlogYes.Domain.Entities
 {
     public class Category
     {

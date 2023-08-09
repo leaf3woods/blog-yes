@@ -1,5 +1,8 @@
-﻿namespace BlogYes.Infrastructure.Models
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace BlogYes.Infrastructure.Models
 {
+    [Owned]
     public class TagDo
     {
         public string Name { get; set; } = null!;
