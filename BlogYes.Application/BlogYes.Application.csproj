@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Utilities\MapperProfiles\" />
+    <Folder Include="Utilities\MapperProfiles\DtoProfiles\" />
   </ItemGroup>
 
 </Project>

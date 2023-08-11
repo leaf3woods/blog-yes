@@ -1,18 +1,18 @@
 ﻿
 namespace BlogYes.Core
 {
-    public class PaginatedList<T> where T : new()
+    public class PaginatedList<T>
     {
-        public PaginatedList(IEnumerable<T> content, long itemCount, long pageIndex, int pageSize)
+        public PaginatedList(IEnumerable<T> content, long totalItems, long pageIndex, int pageSize)
         {
             Content = content;
-            ItemCount = itemCount; PageIndex = pageIndex; PageSize = pageSize;
-            PageCount = (int)Math.Ceiling(itemCount / (double)pageSize);
+            TotalItems = totalItems; PageIndex = pageIndex; PageSize = pageSize;
+            TotalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
         }
-        public long ItemCount { get; init; }
+        public long TotalItems { get; init; }
         public long PageIndex { get; init; }
         public int PageSize { get; init; }
-        public long PageCount { get; init; }
+        public long TotalPages { get; init; }
         public IEnumerable<T> Content { get; init; }
     }
 }
