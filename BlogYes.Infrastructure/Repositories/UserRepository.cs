@@ -6,12 +6,12 @@ namespace BlogYes.Infrastructure.Repositories
 {
     public class UserRepository : Repository<User, UserDo>, IUserRepository
     {
-        public override Task DeleteAsync<TKey>(TKey key)
+        public override Task<int> DeleteAsync<TKey>(TKey key)
         {
             throw new NotImplementedException();
         }
 
-        public override Task DeleteRangeAsync<TKey>(IEnumerable<TKey> ids)
+        public override Task<int> DeleteRangeAsync<TKey>(IEnumerable<TKey> ids)
         {
             throw new NotImplementedException();
         }

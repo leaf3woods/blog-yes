@@ -12,6 +12,7 @@ builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 builder.Host.ConfigureContainer<ContainerBuilder>(config =>
     config.RegisterAssemblyModules(Assembly.GetExecutingAssembly()));
 
+builder.Services.AddLogging();
 // Add services to the container.
 builder.Services.AddControllers();
 
@@ -41,6 +42,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

@@ -7,18 +7,18 @@ namespace BlogYes.Domain.Repositories
         where TEntity : class, IAggregateRoot, new()
         where TModel : class
     {
+        public Task<int> CreateAsync(TEntity dto);
+
+        public Task<int> CreateRangeAsync(IEnumerable<TEntity> dtos);
+
+        public Task<int> DeleteAsync<TKey>(TKey key);
+
+        public Task<int> DeleteRangeAsync<TKey>(IEnumerable<TKey> keys);
+
         public Task<TEntity?> GetAsync<TKey>(TKey key);
 
         public Task<IEnumerable<TEntity>> GetAllAsync();
 
         public Task<PaginatedList<TEntity>> GetPaginatedAsync(int pageIndex, int pageSize);
-
-        public Task CreateAsync(TEntity dto);
-
-        public Task CreateRangeAsync(IEnumerable<TEntity> dtos);
-
-        public Task DeleteAsync<TKey>(TKey key);
-
-        public Task DeleteRangeAsync<TKey>(IEnumerable<TKey> keys);
     }
 }
