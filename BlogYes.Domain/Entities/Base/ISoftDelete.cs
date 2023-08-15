@@ -1,5 +1,5 @@
 ﻿
-namespace BlogYes.Infrastructure.Models.Base
+namespace BlogYes.Domain.Entities.Base
 {
     public interface ISoftDelete
     {

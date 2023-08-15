@@ -2,14 +2,22 @@
 
 namespace BlogYes.Domain.Entities
 {
-    public class Comment : IncrementEntity
+    public class Comment : IncrementEntity, ISoftDelete
     {
-        public long BlogId { get; set; }
         public long? ParentId { get; set; }
-        public DateTime Time { get; set; }
+        public DateTime PostTime { get; set; }
         public long Like { get; set; }
         public long Star { get; set; }
-        public string UserName { get; set; } = null!;
+
+        #region navigation
         public Guid UserId { get; set; }
+        public virtual User User { get; set; } = null!;
+        public long BlogId { get; set; }
+        public virtual Blog Blog { get; set; } = null!;
+        #endregion
+
+        #region filter
+        public bool SoftDeleted { get; set; } = false;
+        #endregion
     }
 }

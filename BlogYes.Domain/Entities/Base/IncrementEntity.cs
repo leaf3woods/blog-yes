@@ -1,9 +1,12 @@
-﻿using BlogYes.Domain.Entities.Base;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BlogYes.Domain.Entities.Base
 {
     public class IncrementEntity : IAggregateRoot
     {
-        public long? Id { get; set; } = null!;
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public long Id { get; set; }
     }
 }

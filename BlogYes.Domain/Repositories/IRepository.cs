@@ -3,9 +3,8 @@ using BlogYes.Domain.Entities.Base;
 
 namespace BlogYes.Domain.Repositories
 {
-    public interface IRepository<TEntity, TModel> 
+    public interface IRepository<TEntity> 
         where TEntity : class, IAggregateRoot, new()
-        where TModel : class
     {
         public Task<int> CreateAsync(TEntity dto);
 

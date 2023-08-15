@@ -1,22 +1,22 @@
-﻿using BlogYes.Infrastructure.Models;
-using BlogYes.Infrastructure.Models.Base;
+﻿using BlogYes.Domain.Entities;
+using BlogYes.Domain.Entities.Base;
 using Microsoft.EntityFrameworkCore;
 
 namespace BlogYes.Infrastructure.DbContexts
 {
     public class PgDbContext : DbContext
     {
-        public PgDbContext()
+        public PgDbContext(DbContextOptions<PgDbContext> options) : base(options)
         {
 
         }
 
         #region dbsets
 
-        public DbSet<UserDo> Users { get; set; }
-        public DbSet<BlogDo> Blogs { get; set; }
-        public  DbSet<CommentDo> Comments { get; set; }
-        public  DbSet<CategoryDo> Categories { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Blog> Blogs { get; set; }
+        public  DbSet<Comment> Comments { get; set; }
+        public  DbSet<Category> Categories { get; set; }
 
         #endregion
 
@@ -49,20 +49,79 @@ namespace BlogYes.Infrastructure.DbContexts
 
             #region entities relationship
 
-            modelBuilder.Entity<BlogDo>()
+            #region blog
+            modelBuilder.Entity<Blog>()
+                .HasIndex(b => b.ModifyTime)
+                .IsDescending();
+
+            modelBuilder.Entity<Blog>()
+                .HasIndex(b => b.CreateTime)
+                .IsDescending();
+
+            modelBuilder.Entity<Blog>()
+                .HasIndex(b => b.SoftDeleted);
+
+            modelBuilder.Entity<Blog>()
+                .OwnsMany(b => b.Tags);
+
+            modelBuilder.Entity<Blog>()
                 .HasMany(b => b.Comments)
                 .WithOne(c => c.Blog)
                 .HasForeignKey(c => c.BlogId);
 
-            modelBuilder.Entity<BlogDo>()
+            modelBuilder.Entity<Blog>()
                 .HasOne(b => b.Category)
                 .WithMany(c => c.Blogs)
-                .HasForeignKey(b => b.CategoryName);
+                .HasForeignKey(b => b.CategoryId);
+            #endregion
 
-            modelBuilder.Entity<UserDo>()
+            #region comment
+            modelBuilder.Entity<Comment>()
+                .HasIndex(c => c.SoftDeleted);
+
+            modelBuilder.Entity<Comment>()
+                .HasIndex(c => c.PostTime)
+                .IsDescending();
+            #endregion
+
+            #region category
+            modelBuilder.Entity<Category>()
+                .HasIndex(b => b.SoftDeleted);
+
+            modelBuilder.Entity<Category>()
+                .HasIndex(b => b.CreateTime);
+
+            modelBuilder.Entity<Category>()
+                .HasMany(c => c.Blogs)
+                .WithOne(b => b.Category)
+                .HasForeignKey(b => b.CategoryId);
+            #endregion
+
+            #region user
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.SoftDeleted);
+
+            modelBuilder.Entity<User>()
+                .OwnsOne(u => u.Settings);
+
+            modelBuilder.Entity<User>()
+                .OwnsOne(u => u.Detail);
+
+            modelBuilder.Entity<User>()
                 .HasMany(u => u.Blogs)
-                .WithOne(b => b.UserDo)
+                .WithOne(b => b.User)
                 .HasForeignKey(b => b.UserId);
+            #endregion
+
+            #region role
+            modelBuilder.Entity<Role>()
+                .HasIndex(u => u.SoftDeleted);
+
+            modelBuilder.Entity<Role>()
+                .HasMany(u => u.Users)
+                .WithOne(b => b.Role)
+                .HasForeignKey(b => b.RoleId);
+            #endregion
 
             #endregion
 

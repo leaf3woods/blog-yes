@@ -1,10 +1,10 @@
 ﻿using BlogYes.Domain.Entities;
 using BlogYes.Domain.Repositories;
-using BlogYes.Infrastructure.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace BlogYes.Infrastructure.Repositories
 {
-    public class UserRepository : Repository<User, UserDo>, IUserRepository
+    public class UserRepository : Repository<User>, IUserRepository
     {
         public override Task<int> DeleteAsync<TKey>(TKey key)
         {
@@ -15,6 +15,11 @@ namespace BlogYes.Infrastructure.Repositories
         {
             throw new NotImplementedException();
         }
+
+        public async Task<User?> FindAsync(string username) =>
+             await DbContext.Set<User>()
+                .SingleOrDefaultAsync(u => u.Username == username);
+        
 
         public override Task<User?> GetAsync<TKey>(TKey key)
         {

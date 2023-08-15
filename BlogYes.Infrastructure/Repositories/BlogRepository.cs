@@ -1,10 +1,9 @@
 ﻿using BlogYes.Domain.Entities;
 using BlogYes.Domain.Repositories;
-using BlogYes.Infrastructure.Models;
 
 namespace BlogYes.Infrastructure.Repositories
 {
-    public class BlogRepository : Repository<Blog, BlogDo>, IBlogRepository
+    public class BlogRepository : Repository<Blog>, IBlogRepository
     {
         public override Task<int> DeleteAsync<TKey>(TKey key)
         {

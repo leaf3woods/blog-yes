@@ -1,4 +1,4 @@
-﻿using BlogYes.Infrastructure.Models.Base;
+﻿using BlogYes.Domain.Entities.Base;
 using Microsoft.EntityFrameworkCore.Metadata;
 using System.Linq.Expressions;
 using System.Reflection;
