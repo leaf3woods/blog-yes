@@ -1,4 +1,6 @@
 ﻿
+using Microsoft.Extensions.Configuration;
+
 namespace BlogYes.Application.Utilities
 {
     public static class SettingUtil

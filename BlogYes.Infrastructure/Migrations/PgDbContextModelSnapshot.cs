@@ -70,7 +70,7 @@ namespace BlogYes.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Blogs");
+                    b.ToTable("Blog", (string)null);
                 });
 
             modelBuilder.Entity("BlogYes.Domain.Entities.Category", b =>
@@ -101,7 +101,7 @@ namespace BlogYes.Infrastructure.Migrations
 
                     b.HasIndex("SoftDeleted");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Category", (string)null);
                 });
 
             modelBuilder.Entity("BlogYes.Domain.Entities.Comment", b =>
@@ -144,7 +144,7 @@ namespace BlogYes.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Comments");
+                    b.ToTable("Comment", (string)null);
                 });
 
             modelBuilder.Entity("BlogYes.Domain.Entities.Role", b =>
@@ -160,7 +160,7 @@ namespace BlogYes.Infrastructure.Migrations
 
                     b.HasIndex("SoftDeleted");
 
-                    b.ToTable("Role");
+                    b.ToTable("Role", (string)null);
                 });
 
             modelBuilder.Entity("BlogYes.Domain.Entities.User", b =>
@@ -200,11 +200,16 @@ namespace BlogYes.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Password");
+
                     b.HasIndex("RoleId");
 
                     b.HasIndex("SoftDeleted");
 
-                    b.ToTable("Users");
+                    b.HasIndex("Username")
+                        .IsUnique();
+
+                    b.ToTable("User", (string)null);
                 });
 
             modelBuilder.Entity("BlogYes.Domain.Entities.Blog", b =>
@@ -221,7 +226,7 @@ namespace BlogYes.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsMany("BlogYes.Domain.ValueObjects.Blog.Tag", "Tags", b1 =>
+                    b.OwnsMany("BlogYes.Domain.Entities.Blog.Tags#BlogYes.Domain.ValueObjects.Blog.Tag", "Tags", b1 =>
                         {
                             b1.Property<long>("BlogId")
                                 .HasColumnType("bigint");
@@ -242,7 +247,7 @@ namespace BlogYes.Infrastructure.Migrations
 
                             b1.HasKey("BlogId", "Id");
 
-                            b1.ToTable("Tag");
+                            b1.ToTable("Tag", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("BlogId");
@@ -282,7 +287,7 @@ namespace BlogYes.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsOne("BlogYes.Domain.ValueObjects.User.Detail", "Detail", b1 =>
+                    b.OwnsOne("BlogYes.Domain.Entities.User.Detail#BlogYes.Domain.ValueObjects.User.Detail", "Detail", b1 =>
                         {
                             b1.Property<Guid>("UserId")
                                 .HasColumnType("uuid");
@@ -295,13 +300,13 @@ namespace BlogYes.Infrastructure.Migrations
 
                             b1.HasKey("UserId");
 
-                            b1.ToTable("Users");
+                            b1.ToTable("User", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("UserId");
                         });
 
-                    b.OwnsOne("BlogYes.Domain.ValueObjects.User.Setting", "Settings", b1 =>
+                    b.OwnsOne("BlogYes.Domain.Entities.User.Settings#BlogYes.Domain.ValueObjects.User.Setting", "Settings", b1 =>
                         {
                             b1.Property<Guid>("UserId")
                                 .HasColumnType("uuid");
@@ -312,7 +317,7 @@ namespace BlogYes.Infrastructure.Migrations
 
                             b1.HasKey("UserId");
 
-                            b1.ToTable("Users");
+                            b1.ToTable("User", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("UserId");

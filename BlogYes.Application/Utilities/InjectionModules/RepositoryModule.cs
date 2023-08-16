@@ -1,8 +1,7 @@
 ﻿using Autofac;
-using BlogYes.Infrastructure.DbContexts;
 using System.Reflection;
 
-namespace BlogYes.Application.Utilities.InjectionModules
+namespace BlogYes.WebApi.Utilities.InjectionModules
 {
     public class RepositoryModule : Autofac.Module
     {

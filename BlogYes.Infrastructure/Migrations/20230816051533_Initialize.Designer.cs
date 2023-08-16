@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BlogYes.Infrastructure.Migrations
 {
     [DbContext(typeof(PgDbContext))]
-    [Migration("20230815193519_Initial")]
-    partial class Initial
+    [Migration("20230816051533_Initialize")]
+    partial class Initialize
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -73,7 +73,7 @@ namespace BlogYes.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Blogs");
+                    b.ToTable("Blog");
                 });
 
             modelBuilder.Entity("BlogYes.Domain.Entities.Category", b =>
@@ -104,7 +104,7 @@ namespace BlogYes.Infrastructure.Migrations
 
                     b.HasIndex("SoftDeleted");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Category");
                 });
 
             modelBuilder.Entity("BlogYes.Domain.Entities.Comment", b =>
@@ -147,7 +147,7 @@ namespace BlogYes.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Comments");
+                    b.ToTable("Comment");
                 });
 
             modelBuilder.Entity("BlogYes.Domain.Entities.Role", b =>
@@ -203,11 +203,16 @@ namespace BlogYes.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Password");
+
                     b.HasIndex("RoleId");
 
                     b.HasIndex("SoftDeleted");
 
-                    b.ToTable("Users");
+                    b.HasIndex("Username")
+                        .IsUnique();
+
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("BlogYes.Domain.Entities.Blog", b =>
@@ -298,7 +303,7 @@ namespace BlogYes.Infrastructure.Migrations
 
                             b1.HasKey("UserId");
 
-                            b1.ToTable("Users");
+                            b1.ToTable("User");
 
                             b1.WithOwner()
                                 .HasForeignKey("UserId");
@@ -315,7 +320,7 @@ namespace BlogYes.Infrastructure.Migrations
 
                             b1.HasKey("UserId");
 
-                            b1.ToTable("Users");
+                            b1.ToTable("User");
 
                             b1.WithOwner()
                                 .HasForeignKey("UserId");

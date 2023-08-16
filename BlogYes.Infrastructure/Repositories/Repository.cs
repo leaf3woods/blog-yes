@@ -5,7 +5,6 @@ using BlogYes.Domain.Repositories;
 using BlogYes.Infrastructure.DbContexts;
 using BlogYes.Infrastructure.Utilities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace BlogYes.Infrastructure.Repositories
 {
@@ -20,7 +19,7 @@ namespace BlogYes.Infrastructure.Repositories
 
         public async Task<int> CreateAsync(TEntity entity)
         {
-                await DbContext.Set<TEntity>().AddAsync(entity);
+            await DbContext.Set<TEntity>().AddAsync(entity);
             var count = await DbContext.SaveChangesAsync();
             return count;
         }
@@ -35,10 +34,6 @@ namespace BlogYes.Infrastructure.Repositories
             return count;
         }
 
-        public abstract Task<int> DeleteAsync<TKey>(TKey key);
-
-        public abstract Task<int> DeleteRangeAsync<TKey>(IEnumerable<TKey> ids);
-
         public async Task<IEnumerable<TEntity>> GetAllAsync()
         {
             var results = await DbContext.Set<TEntity>()
@@ -47,8 +42,6 @@ namespace BlogYes.Infrastructure.Repositories
                 .ToArrayAsync();
             return results;
         }
-
-        public abstract Task<TEntity?> GetAsync<TKey>(TKey key);
 
         public async Task<PaginatedList<TEntity>> GetPaginatedAsync(int pageIndex, int pageSize)
         {

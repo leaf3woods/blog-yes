@@ -7,13 +7,13 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BlogYes.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class Initialize : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Categories",
+                name: "Category",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -25,7 +25,7 @@ namespace BlogYes.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Categories", x => x.Id);
+                    table.PrimaryKey("PK_Category", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -41,7 +41,7 @@ namespace BlogYes.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Users",
+                name: "User",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -59,9 +59,9 @@ namespace BlogYes.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.Id);
+                    table.PrimaryKey("PK_User", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Users_Role_RoleId",
+                        name: "FK_User_Role_RoleId",
                         column: x => x.RoleId,
                         principalTable: "Role",
                         principalColumn: "Id",
@@ -69,7 +69,7 @@ namespace BlogYes.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Blogs",
+                name: "Blog",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -85,23 +85,23 @@ namespace BlogYes.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Blogs", x => x.Id);
+                    table.PrimaryKey("PK_Blog", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Blogs_Categories_CategoryId",
+                        name: "FK_Blog_Category_CategoryId",
                         column: x => x.CategoryId,
-                        principalTable: "Categories",
+                        principalTable: "Category",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Blogs_Users_UserId",
+                        name: "FK_Blog_User_UserId",
                         column: x => x.UserId,
-                        principalTable: "Users",
+                        principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Comments",
+                name: "Comment",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
@@ -116,17 +116,17 @@ namespace BlogYes.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Comments", x => x.Id);
+                    table.PrimaryKey("PK_Comment", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Comments_Blogs_BlogId",
+                        name: "FK_Comment_Blog_BlogId",
                         column: x => x.BlogId,
-                        principalTable: "Blogs",
+                        principalTable: "Blog",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Comments_Users_UserId",
+                        name: "FK_Comment_User_UserId",
                         column: x => x.UserId,
-                        principalTable: "Users",
+                        principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -145,69 +145,69 @@ namespace BlogYes.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Tag", x => new { x.BlogId, x.Id });
                     table.ForeignKey(
-                        name: "FK_Tag_Blogs_BlogId",
+                        name: "FK_Tag_Blog_BlogId",
                         column: x => x.BlogId,
-                        principalTable: "Blogs",
+                        principalTable: "Blog",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Blogs_CategoryId",
-                table: "Blogs",
+                name: "IX_Blog_CategoryId",
+                table: "Blog",
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Blogs_CreateTime",
-                table: "Blogs",
+                name: "IX_Blog_CreateTime",
+                table: "Blog",
                 column: "CreateTime",
                 descending: new bool[0]);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Blogs_ModifyTime",
-                table: "Blogs",
+                name: "IX_Blog_ModifyTime",
+                table: "Blog",
                 column: "ModifyTime",
                 descending: new bool[0]);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Blogs_SoftDeleted",
-                table: "Blogs",
+                name: "IX_Blog_SoftDeleted",
+                table: "Blog",
                 column: "SoftDeleted");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Blogs_UserId",
-                table: "Blogs",
+                name: "IX_Blog_UserId",
+                table: "Blog",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Categories_CreateTime",
-                table: "Categories",
+                name: "IX_Category_CreateTime",
+                table: "Category",
                 column: "CreateTime");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Categories_SoftDeleted",
-                table: "Categories",
+                name: "IX_Category_SoftDeleted",
+                table: "Category",
                 column: "SoftDeleted");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Comments_BlogId",
-                table: "Comments",
+                name: "IX_Comment_BlogId",
+                table: "Comment",
                 column: "BlogId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Comments_PostTime",
-                table: "Comments",
+                name: "IX_Comment_PostTime",
+                table: "Comment",
                 column: "PostTime",
                 descending: new bool[0]);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Comments_SoftDeleted",
-                table: "Comments",
+                name: "IX_Comment_SoftDeleted",
+                table: "Comment",
                 column: "SoftDeleted");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Comments_UserId",
-                table: "Comments",
+                name: "IX_Comment_UserId",
+                table: "Comment",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
@@ -216,33 +216,44 @@ namespace BlogYes.Infrastructure.Migrations
                 column: "SoftDeleted");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_RoleId",
-                table: "Users",
+                name: "IX_User_Password",
+                table: "User",
+                column: "Password");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_User_RoleId",
+                table: "User",
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_SoftDeleted",
-                table: "Users",
+                name: "IX_User_SoftDeleted",
+                table: "User",
                 column: "SoftDeleted");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_User_Username",
+                table: "User",
+                column: "Username",
+                unique: true);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Comments");
+                name: "Comment");
 
             migrationBuilder.DropTable(
                 name: "Tag");
 
             migrationBuilder.DropTable(
-                name: "Blogs");
+                name: "Blog");
 
             migrationBuilder.DropTable(
-                name: "Categories");
+                name: "Category");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "User");
 
             migrationBuilder.DropTable(
                 name: "Role");

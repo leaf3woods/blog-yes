@@ -8,15 +8,14 @@ namespace BlogYes.Infrastructure.DbContexts
     {
         public PgDbContext(DbContextOptions<PgDbContext> options) : base(options)
         {
-
         }
 
         #region dbsets
 
-        public DbSet<User> Users { get; set; }
-        public DbSet<Blog> Blogs { get; set; }
-        public  DbSet<Comment> Comments { get; set; }
-        public  DbSet<Category> Categories { get; set; }
+        public DbSet<User> User { get; set; }
+        public DbSet<Blog> Blog { get; set; }
+        public  DbSet<Comment> Comment { get; set; }
+        public  DbSet<Category> Category { get; set; }
 
         #endregion
 
@@ -99,6 +98,13 @@ namespace BlogYes.Infrastructure.DbContexts
 
             #region user
             modelBuilder.Entity<User>()
+                .HasIndex(u => u.Username)
+                .IsUnique();
+
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.Password);
+
+            modelBuilder.Entity<User>()
                 .HasIndex(u => u.SoftDeleted);
 
             modelBuilder.Entity<User>()
@@ -118,13 +124,15 @@ namespace BlogYes.Infrastructure.DbContexts
                 .HasIndex(u => u.SoftDeleted);
 
             modelBuilder.Entity<Role>()
+                .OwnsMany(r => r.Scopes);
+
+            modelBuilder.Entity<Role>()
                 .HasMany(u => u.Users)
                 .WithOne(b => b.Role)
                 .HasForeignKey(b => b.RoleId);
             #endregion
 
             #endregion
-
         }
     }
 }

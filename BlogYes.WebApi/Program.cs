@@ -1,20 +1,21 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using BlogYes.Application.Utilities;
 using BlogYes.Infrastructure.DbContexts;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Npgsql;
 using System.Reflection;
+using BlogYes.Application.Utilities;
+using static System.Net.Mime.MediaTypeNames;
 
 var builder = WebApplication.CreateBuilder(args);
 SettingUtil.Initialize(builder.Configuration);
 EncryptUtil.Initialize(SettingUtil.Jwt.KeyFolder);
-// Change container to autofac
+// Change container to autoFac
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 builder.Host.ConfigureContainer<ContainerBuilder>(config =>
-    config.RegisterAssemblyModules(Assembly.GetExecutingAssembly()));
+    config.RegisterAssemblyModules(Assembly.GetExecutingAssembly(), Assembly.Load("BlogYes." + nameof(Application))));
 
 // Add services to the container.
 builder.Services.AddLogging();
@@ -54,11 +55,11 @@ builder.Services.AddPooledDbContextFactory<PgDbContext>(options => options.UseNp
     ));
 
 // Add mapper profiles
-builder.Services.AddAutoMapper(config => config.AddMaps(Assembly.GetExecutingAssembly()));
+builder.Services.AddAutoMapper(config => config.AddMaps(Assembly.Load("BlogYes." + nameof(Application))));
 
 // Add mediatR
 builder.Services.AddMediatR(config =>
-    config.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
+    config.RegisterServicesFromAssemblies(Assembly.Load("BlogYes." + nameof(Application))));
 
 var app = builder.Build();
 

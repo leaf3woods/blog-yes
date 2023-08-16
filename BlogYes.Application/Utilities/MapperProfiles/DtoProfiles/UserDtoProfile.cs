@@ -9,8 +9,7 @@ namespace BlogYes.Application.Utilities.MapperProfiles.DtoProfiles
         public UserDtoProfile()
         {
             CreateMap<User, UserReadDto>();
-            CreateMap<UserUpdateDto, User>();
-            CreateMap<UserCreateDto, User>();
+            CreateMap<UserRegisterDto, User>();
         }
     }
 }
