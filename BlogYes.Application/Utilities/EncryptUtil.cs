@@ -29,6 +29,7 @@ namespace BlogYes.Application.Utilities
                 _privatePem = File.ReadAllText(privateKeyPath);
                 _publicPem = File.ReadAllText(publicKeyPath);
                 ECDsa.ImportFromPem(_publicPem);
+                ECDsa.ImportFromPem(_privatePem);
             }
         }
 
@@ -46,7 +47,8 @@ namespace BlogYes.Application.Utilities
             var expire = nbf + expires;
             var token = new JwtSecurityToken(issuer, audience,
                 claims, nbf, expire, credentials);
-            return token.ToString();
+            var encode = new JwtSecurityTokenHandler().WriteToken(token);
+            return encode;
         }
     }
 }

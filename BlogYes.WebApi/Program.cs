@@ -27,7 +27,11 @@ builder.Services.AddControllers().AddJsonOptions(config =>
     config.JsonSerializerOptions.PropertyNameCaseInsensitive = false;
 });
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(option =>
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(option =>
 {
     option.TokenValidationParameters = new TokenValidationParameters
     {
@@ -44,6 +48,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
         ClockSkew = SettingUtil.Jwt.ExpireMin
     };
 });
+
+builder.Services.AddAuthorization(options =>
+    options.AddPolicy("super", new Microsoft.AspNetCore.Authorization.AuthorizationPolicy())
+);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

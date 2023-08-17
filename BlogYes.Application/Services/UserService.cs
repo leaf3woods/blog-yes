@@ -7,6 +7,7 @@ using BlogYes.Domain.Entities;
 using BlogYes.Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using System.Text;
 
 namespace BlogYes.Application.Services
 {
@@ -34,8 +35,10 @@ namespace BlogYes.Application.Services
             {
                 throw new Exception("user not exist or password error");
             }
+            var scopeNames = user.Role.Scopes.Select(x => x.Name);
             var token = EncryptUtil.GenerateJwtToken(SettingUtil.Jwt.Issuer, SettingUtil.Jwt.Audience, SettingUtil.Jwt.ExpireMin,
-                new Claim(CustomClaimsType.UserId, user.Id.ToString()), new Claim(CustomClaimsType.Role, user.Role.ToString()!)) ??
+                new Claim(CustomClaimsType.UserId, user.Id.ToString()), new Claim(CustomClaimsType.Role, user.Role.Name),
+                new Claim(CustomClaimsType.Scopes, string.Join(',', scopeNames))) ??
                 throw new Exception("generate jwt token error");
             return token;
         }
