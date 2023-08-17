@@ -25,6 +25,7 @@ namespace BlogYes.WebApi.Controllers
         [Route("id/{userId:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Authorize(Policy = $"{ManagedResource.User}.{ManagedAction.Read}.{ManagedItem.Id}")]
         public async Task<ActionResult<UserReadDto>> GetUser(Guid userId) =>
             Ok(await _userService.GetUserAsync(userId));
 
@@ -32,6 +33,7 @@ namespace BlogYes.WebApi.Controllers
         [Route("all")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Authorize(Policy = $"{ManagedResource.User}.{ManagedAction.Read}.{ManagedItem.All}")]
         public async Task<ActionResult<IEnumerable<UserReadDto>>> GetUsers() =>
             Ok(await _userService.GetUsersAsync());
 
@@ -55,6 +57,7 @@ namespace BlogYes.WebApi.Controllers
         [Route("id/{userId:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Authorize(Policy = $"{ManagedResource.User}.{ManagedAction.Delete}.{ManagedItem.Id}")]
         public async Task<int> Delete(Guid userId) =>
             await _userService.DeleteAsync(userId);
     }

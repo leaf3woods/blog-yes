@@ -44,20 +44,20 @@ namespace BlogYes.Application.Services
             return token;
         }
 
-        [Scope("delete user by id", ManagedResource.User, ManagedAction.Delete, "id")]
+        [Scope("delete user by id", ManagedResource.User, ManagedAction.Delete, ManagedItem.Id)]
         public async Task<int> DeleteAsync(Guid id)
         {
             return await _userRepository.DeleteAsync(id);
         }
 
-        [Scope("get single user by id", ManagedResource.User, ManagedAction.Read, "id")]
+        [Scope("get single user by id", ManagedResource.User, ManagedAction.Read, ManagedItem.Id)]
         public async Task<UserReadDto> GetUserAsync(Guid id)
         {
             var user = await _userRepository.FindAsync(id);
             var result = Mapper.Map<UserReadDto>(user);
             return result;
         }
-        [Scope("get all users", ManagedResource.User, ManagedAction.Read, "all")]
+        [Scope("get all users", ManagedResource.User, ManagedAction.Read, ManagedItem.All)]
         public async Task<IEnumerable<UserReadDto>> GetUsersAsync()
         {
             var users = await _userRepository.GetQueryWhere().ToArrayAsync();
