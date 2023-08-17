@@ -9,6 +9,6 @@ namespace BlogYes.Core
             AllowTrailingCommas = true,
             PropertyNameCaseInsensitive = false,
         };
-
+        public const string SuperRole = "super";
     }
 }

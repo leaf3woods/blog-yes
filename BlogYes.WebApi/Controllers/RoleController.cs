@@ -1,6 +1,5 @@
 ﻿using BlogYes.Application.Dtos;
 using BlogYes.Application.Services.Base;
-using BlogYes.Domain.ValueObjects.UserValue;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BlogYes.WebApi.Controllers
@@ -42,7 +41,7 @@ namespace BlogYes.WebApi.Controllers
         [Route("id/{roleId:guid}/scopes")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<int>> ModifyRoleScopeAsync(Guid roleId, List<RoleScopeModifyDto> scopes) =>
+        public async Task<ActionResult<int>> ModifyRoleScopeAsync(Guid roleId, List<string> scopes) =>
             Ok(await _roleService.ModifyRoleScopeAsync(roleId, scopes));
 
         [HttpGet]

@@ -6,7 +6,7 @@ namespace BlogYes.Application.Dtos
     {
         public string Name { get; set; } = null!;
         public string Description { get; set; } = null!;
-        public IEnumerable<RoleScopeModifyDto> Scopes { get; set; } = null!;
+        public IEnumerable<string> ScopeNames { get; set; } = null!;
     }
 
     public class RoleReadDto : ReadDto
@@ -26,6 +26,5 @@ namespace BlogYes.Application.Dtos
     public class RoleScopeModifyDto : UpdateDto
     {
         public string Name { get; set; } = null!;
-        public string Description { get; set; } = null!;
     }
 }

@@ -1,4 +1,5 @@
-﻿using BlogYes.Application.Dtos;
+﻿using BlogYes.Application.Auth;
+using BlogYes.Application.Dtos;
 using BlogYes.Application.Services.Base;
 using BlogYes.Application.Utilities;
 using BlogYes.Core;
@@ -7,10 +8,10 @@ using BlogYes.Domain.Entities;
 using BlogYes.Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
-using System.Text;
 
 namespace BlogYes.Application.Services
 {
+    [Scope("manage all user resources", ManagedResource.User)]
     public class UserService : BaseService, IUserService
     {
         public UserService(
@@ -43,18 +44,20 @@ namespace BlogYes.Application.Services
             return token;
         }
 
+        [Scope("delete user by id", ManagedResource.User, ManagedAction.Delete, "id")]
         public async Task<int> DeleteAsync(Guid id)
         {
             return await _userRepository.DeleteAsync(id);
         }
 
+        [Scope("get single user by id", ManagedResource.User, ManagedAction.Read, "id")]
         public async Task<UserReadDto> GetUserAsync(Guid id)
         {
             var user = await _userRepository.FindAsync(id);
             var result = Mapper.Map<UserReadDto>(user);
             return result;
         }
-
+        [Scope("get all users", ManagedResource.User, ManagedAction.Read, "all")]
         public async Task<IEnumerable<UserReadDto>> GetUsersAsync()
         {
             var users = await _userRepository.GetQueryWhere().ToArrayAsync();

@@ -8,10 +8,16 @@ using Npgsql;
 using System.Reflection;
 using BlogYes.Application.Utilities;
 using BlogYes.Core.Utilities;
+using BlogYes.Application.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
+
+#region util Initialize
+RequireScopeUtil.Initialize();
 SettingUtil.Initialize(builder.Configuration);
 EncryptUtil.Initialize(SettingUtil.Jwt.KeyFolder);
+#endregion
+
 // Change container to autoFac
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 builder.Host.ConfigureContainer<ContainerBuilder>(config =>
@@ -50,7 +56,7 @@ builder.Services.AddAuthentication(options =>
 });
 
 builder.Services.AddAuthorization(options =>
-    options.AddPolicy("super", new Microsoft.AspNetCore.Authorization.AuthorizationPolicy())
+    options.AddPolicyExt(RequireScopeUtil.Scopes)
 );
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

@@ -14,12 +14,9 @@ namespace BlogYes.Core.Utilities
             Jwt.Audience = jwtSetting.GetValue<string>(nameof(Jwt.Audience)) ??
                 throw new Exception("missing audience in jwt setting section");
             Jwt.ExpireMin = TimeSpan.FromMinutes(jwtSetting.GetValue<int>(nameof(Jwt.ExpireMin)));
-            SupportedScopes = configuration.GetSection(nameof(SupportedScopes)).Get<string[]>() ??
-                throw new Exception("missing audience in jwt setting section");
         }
 
         public static JwtSettings Jwt { get; private set; } = new JwtSettings();
-        public static string[] SupportedScopes { get; private set; } = null!;
 
         public class JwtSettings
         {
