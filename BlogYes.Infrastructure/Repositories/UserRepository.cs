@@ -1,11 +1,18 @@
 ﻿using BlogYes.Domain.Entities;
 using BlogYes.Domain.Repositories;
+using BlogYes.Infrastructure.DbContexts;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace BlogYes.Infrastructure.Repositories
 {
     public class UserRepository : Repository<User>, IUserRepository
     {
+        public UserRepository(
+            IDbContextFactory<PgDbContext> dbContextFactory,
+            IConfiguration configuration
+        )  : base( dbContextFactory, configuration ) { }
+
         public async Task<int> DeleteAsync(Guid key)
         {
             var user = await DbContext.Set<User>()
@@ -18,17 +25,25 @@ namespace BlogYes.Infrastructure.Repositories
             return await DbContext.SaveChangesAsync();
         }
 
-        public async Task<User?> FindAsync(Guid key) =>
-            await DbContext.Set<User>()
-                .AsNoTracking()
-                .Include(x => x.Role)
+        public async Task<User?> FindAsync(Guid key, bool tracking = true)
+        {
+            var set = DbContext.Set<User>();
+            var query = tracking ? set : set.AsNoTracking();
+            var result = await query.Include(x => x.Role)
                 .SingleOrDefaultAsync(u => u.Id == key);
+            return result;
+        }
 
-        public async Task<User?> FindAsync(string username) =>
-            await DbContext.Set<User>()
-                .AsNoTracking()
-                .Include(x => x.Role)
+
+        public async Task<User?> FindAsync(string username, bool tracking = true)
+        {
+            var set = DbContext.Set<User>();
+            var query = tracking ? set : set.AsNoTracking();
+            var result = await query.Include(x => x.Role)
                 .SingleOrDefaultAsync(u => u.Username == username);
+            return result;
+        }
+
 
         public async Task<int> UpdateAsync(User modifiedUser)
         {

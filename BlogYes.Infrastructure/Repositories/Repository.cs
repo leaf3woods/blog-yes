@@ -12,10 +12,19 @@ namespace BlogYes.Infrastructure.Repositories
     public abstract class Repository<TEntity> : IRepository<TEntity>
         where TEntity : class, IAggregateRoot, new()
     {
-        public IDbContextFactory<PgDbContext> DbContextFactory { get; set; } = null!;
-        private Lazy<PgDbContext> _lazyContext  { get => new(DbContextFactory.CreateDbContext()); }
+        public Repository(
+                IDbContextFactory<PgDbContext> dbContextFactory,
+                IConfiguration configuration
+            )
+        {
+            _lazyContext = new Lazy<PgDbContext>(dbContextFactory.CreateDbContext());
+            _configuration = configuration;
+        }
+
+        private readonly IConfiguration _configuration;
+        private Lazy<PgDbContext> _lazyContext  { get; init; }
         public PgDbContext DbContext { get => _lazyContext.Value;}
-        public IConfiguration Configuration { get; set; } = null!;
+
 
         public async Task<int> CreateAsync(TEntity entity)
         {

@@ -52,7 +52,7 @@ namespace BlogYes.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
 
-        public async Task<int> Delete(Guid id) =>
-            await _userService.DeleteAsync(id);
+        public async Task<int> Delete(Guid userId) =>
+            await _userService.DeleteAsync(userId);
     }
 }

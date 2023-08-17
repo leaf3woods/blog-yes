@@ -1,11 +1,19 @@
 ﻿using BlogYes.Domain.Entities;
 using BlogYes.Domain.Repositories;
 using BlogYes.Domain.ValueObjects.UserValue;
+using BlogYes.Infrastructure.DbContexts;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace BlogYes.Infrastructure.Repositories
 {
     public class RoleRepository : Repository<Role>, IRoleRepository
     {
+        public RoleRepository(
+                IDbContextFactory<PgDbContext> dbContextFactory,
+                IConfiguration configuration
+            ) : base( dbContextFactory, configuration ) { }
+
         public async Task<int> DeleteAsync(Guid key)
         {
             var role = await DbContext.Set<Role>().FindAsync(key);

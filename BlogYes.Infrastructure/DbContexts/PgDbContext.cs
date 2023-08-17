@@ -6,9 +6,7 @@ namespace BlogYes.Infrastructure.DbContexts
 {
     public class PgDbContext : DbContext
     {
-        public PgDbContext(DbContextOptions<PgDbContext> options) : base(options)
-        {
-        }
+        public PgDbContext(DbContextOptions<PgDbContext> options) : base(options) { }
 
         #region dbsets
 
@@ -24,11 +22,11 @@ namespace BlogYes.Infrastructure.DbContexts
         {
             foreach (var entityEntry in ChangeTracker.Entries())
             {
-                if (entityEntry.State == EntityState.Deleted && entityEntry.GetType().IsAssignableTo(typeof(ISoftDelete)))
+
+                if (entityEntry.State == EntityState.Deleted && entityEntry.Entity is ISoftDelete delete)
                 {
                     entityEntry.State = EntityState.Unchanged;
-                    entityEntry.Property("SoftDeleted").CurrentValue = true;
-                    entityEntry.Property("SoftDeleted").IsModified = true;
+                    delete.SoftDeleted = true;
                 }
             }
             return base.SaveChangesAsync(cancellationToken);

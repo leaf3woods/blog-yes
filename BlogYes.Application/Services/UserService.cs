@@ -13,16 +13,13 @@ namespace BlogYes.Application.Services
     public class UserService : BaseService, IUserService
     {
         public UserService(
-            IUserRepository userRepository,
-            IRoleRepository roleRepository
+            IUserRepository userRepository
             )
         {
             _userRepository = userRepository;
-            _roleRepository = roleRepository;
         }
 
         private readonly IUserRepository _userRepository;
-        private readonly IRoleRepository _roleRepository;
 
         public async Task<int> RegisterAsync(UserRegisterDto registerDto)
         {

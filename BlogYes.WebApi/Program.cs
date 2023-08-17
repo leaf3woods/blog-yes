@@ -52,7 +52,7 @@ builder.Services.AddSwaggerGen();
 // Add dbContext pool
 builder.Services.AddPooledDbContextFactory<PgDbContext>(options => options.UseNpgsql(
     new NpgsqlDataSourceBuilder(builder.Configuration.GetConnectionString("Postgres")).Build()
-    ));
+    ).EnableDetailedErrors());
 
 // Add mapper profiles
 builder.Services.AddAutoMapper(config => config.AddMaps(Assembly.Load("BlogYes." + nameof(BlogYes.Application))));

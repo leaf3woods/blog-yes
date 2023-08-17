@@ -7,10 +7,12 @@ namespace BlogYes.WebApi.Utilities.InjectionModules
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterAssemblyTypes(Assembly.Load("BlogYes." + nameof(Infrastructure)))
-                .Where(type => type.IsInNamespace("BlogYes.Infrastructure.Repositories"))
+            builder.RegisterAssemblyTypes(Assembly.Load(WithPrefix(nameof(Infrastructure))), Assembly.Load(WithPrefix(nameof(Domain))))
+                .Where(type => type.Name.EndsWith("Repository"))
                 .AsImplementedInterfaces()
                 .PropertiesAutowired();
         }
+
+        private string WithPrefix(string content) => $"BlogYes." + content;
     }
 }

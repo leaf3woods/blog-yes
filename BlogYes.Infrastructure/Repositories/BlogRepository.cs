@@ -1,11 +1,18 @@
 ﻿using BlogYes.Domain.Entities;
 using BlogYes.Domain.Repositories;
+using BlogYes.Infrastructure.DbContexts;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace BlogYes.Infrastructure.Repositories
 {
     public class BlogRepository : Repository<Blog>, IBlogRepository
     {
+        public BlogRepository(
+                IDbContextFactory<PgDbContext> dbContextFactory,
+                IConfiguration configuration
+            ) : base(dbContextFactory, configuration) { }
+
         public async Task<int> DeleteAsync(long key)
         {
             var blog = await DbContext.Set<Blog>()
