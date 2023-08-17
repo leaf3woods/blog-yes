@@ -7,8 +7,11 @@ namespace BlogYes.Domain.Repositories
     {
         public Task<int> DeleteAsync(Guid key);
 
-        public Task<User?> GetAsync(Guid key);
+        public Task<User?> FindAsync(Guid key);
 
         public Task<User?> FindAsync(string username);
+
+        public Task<int> UpdateAsync(User modifiedUser);
+
     }
 }

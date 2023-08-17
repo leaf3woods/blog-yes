@@ -1,5 +1,6 @@
 ﻿using BlogYes.Core;
 using BlogYes.Domain.Entities.Base;
+using System.Linq.Expressions;
 
 namespace BlogYes.Domain.Repositories
 {
@@ -10,7 +11,7 @@ namespace BlogYes.Domain.Repositories
 
         public Task<int> CreateRangeAsync(IEnumerable<TEntity> dtos);
 
-        public Task<IEnumerable<TEntity>> GetAllAsync();
+        public IQueryable<TEntity> GetQueryWhere(Expression<Func<TEntity, bool>>? expression = null);
 
         public Task<PaginatedList<TEntity>> GetPaginatedAsync(int pageIndex, int pageSize);
     }

@@ -12,7 +12,6 @@ namespace BlogYes.WebApi.Utilities.InjectionModules
                 .Where(type => type.IsAssignableTo(typeof(IBaseService)))
                 .AsImplementedInterfaces()
                 .PropertiesAutowired();
-            var types = Assembly.Load("BlogYes." + nameof(Application)).GetTypes().Where(type => type.IsAssignableTo(typeof(IBaseService)));
         }
     }
 }

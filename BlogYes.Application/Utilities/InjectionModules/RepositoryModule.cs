@@ -11,7 +11,6 @@ namespace BlogYes.WebApi.Utilities.InjectionModules
                 .Where(type => type.IsInNamespace("BlogYes.Infrastructure.Repositories"))
                 .AsImplementedInterfaces()
                 .PropertiesAutowired();
-            var types = Assembly.Load("BlogYes." + nameof(Infrastructure)).GetTypes().Where(type => type.IsInNamespace("BlogYes.Infrastructure.Repositories"));
         }
     }
 }

@@ -1,10 +1,11 @@
-﻿using AutoMapper;
-using BlogYes.Core;
+﻿using BlogYes.Core;
 using BlogYes.Domain.Entities.Base;
 using BlogYes.Domain.Repositories;
 using BlogYes.Infrastructure.DbContexts;
 using BlogYes.Infrastructure.Utilities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using System.Linq.Expressions;
 
 namespace BlogYes.Infrastructure.Repositories
 {
@@ -14,8 +15,7 @@ namespace BlogYes.Infrastructure.Repositories
         public IDbContextFactory<PgDbContext> DbContextFactory { get; set; } = null!;
         private Lazy<PgDbContext> _lazyContext  { get => new(DbContextFactory.CreateDbContext()); }
         public PgDbContext DbContext { get => _lazyContext.Value;}
-
-        public IMapper Mapper { get; init; } = null!;
+        public IConfiguration Configuration { get; set; } = null!;
 
         public async Task<int> CreateAsync(TEntity entity)
         {
@@ -34,13 +34,11 @@ namespace BlogYes.Infrastructure.Repositories
             return count;
         }
 
-        public async Task<IEnumerable<TEntity>> GetAllAsync()
+        public IQueryable<TEntity> GetQueryWhere(Expression<Func<TEntity, bool>>? expression = null)
         {
-            var results = await DbContext.Set<TEntity>()
-                .AsNoTracking()
-                .Take(1000)
-                .ToArrayAsync();
-            return results;
+            return expression == null ?
+                DbContext.Set<TEntity>() :
+                DbContext.Set<TEntity>().Where(expression);
         }
 
         public async Task<PaginatedList<TEntity>> GetPaginatedAsync(int pageIndex, int pageSize)

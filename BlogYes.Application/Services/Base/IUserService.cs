@@ -4,11 +4,16 @@ namespace BlogYes.Application.Services.Base
 {
     public interface IUserService : IBaseService
     {
-        Task<int> RegisterAsync(UserRegisterDto registerDto);
-        Task<string> LoginAsync(UserLoginDto credential);
-        Task<int> DeleteAsync(Guid id);
-        Task<UserReadDto> GetUserAsync(Guid userId);
+        public Task<int> RegisterAsync(UserRegisterDto registerDto);
 
-        Task<IEnumerable<UserReadDto>> GetUsersAsync();
+        public Task<string> LoginAsync(UserLoginDto credential);
+
+        public Task<int> DeleteAsync(Guid id);
+
+        public Task<UserReadDto> GetUserAsync(Guid id);
+
+        public Task<IEnumerable<UserReadDto>> GetUsersAsync();
+
+        public Task<int> ChangeRole(Guid userId, Guid roleId);
     }
 }

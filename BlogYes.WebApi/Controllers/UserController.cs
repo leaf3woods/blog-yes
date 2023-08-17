@@ -9,15 +9,13 @@ namespace BlogYes.WebApi.Controllers
     public class UserController : ControllerBase
     {
         public UserController(
-            IUserService userService, 
-            ILogger<UserController> logger)
+            IUserService userService
+            )
         {
             _userService = userService;
-            _logger = logger;
         }
 
         private readonly IUserService _userService;
-        private readonly ILogger<UserController> _logger;
 
         [HttpGet]
         [Route("id/{userId:guid}")]

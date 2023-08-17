@@ -1,5 +1,5 @@
 ﻿using BlogYes.Domain.Entities.Base;
-using BlogYes.Domain.ValueObjects.Blog;
+using BlogYes.Domain.ValueObjects.BlogValue;
 
 namespace BlogYes.Domain.Entities
 {

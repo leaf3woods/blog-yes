@@ -18,7 +18,7 @@ namespace BlogYes.Infrastructure.Repositories
             return await DbContext.SaveChangesAsync();
         }
 
-        public async Task<User?> GetAsync(Guid key) =>
+        public async Task<User?> FindAsync(Guid key) =>
             await DbContext.Set<User>()
                 .AsNoTracking()
                 .Include(x => x.Role)
@@ -29,5 +29,11 @@ namespace BlogYes.Infrastructure.Repositories
                 .AsNoTracking()
                 .Include(x => x.Role)
                 .SingleOrDefaultAsync(u => u.Username == username);
+
+        public async Task<int> UpdateAsync(User modifiedUser)
+        {
+            DbContext.Set<User>().Update(modifiedUser);
+            return await DbContext.SaveChangesAsync();
+        }
     }
 }

@@ -13,6 +13,7 @@ namespace BlogYes.Infrastructure.DbContexts
         #region dbsets
 
         public DbSet<User> User { get; set; }
+        public DbSet<Role> Role { get; set; }
         public DbSet<Blog> Blog { get; set; }
         public  DbSet<Comment> Comment { get; set; }
         public  DbSet<Category> Category { get; set; }
@@ -35,6 +36,7 @@ namespace BlogYes.Infrastructure.DbContexts
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
             #region soft delete filter
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
@@ -47,6 +49,47 @@ namespace BlogYes.Infrastructure.DbContexts
 
 
             #region entities relationship
+
+            #region user
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.Username)
+                .IsUnique();
+
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.Password);
+
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.SoftDeleted);
+
+            modelBuilder.Entity<User>()
+                .OwnsOne(u => u.Settings);
+
+            modelBuilder.Entity<User>()
+                .OwnsOne(u => u.Detail);
+
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.Blogs)
+                .WithOne(b => b.User)
+                .HasForeignKey(b => b.UserId);
+            #endregion
+
+            #region role
+            modelBuilder.Entity<Role>()
+                .HasIndex(u => u.SoftDeleted);
+
+            modelBuilder.Entity<Role>()
+                .HasIndex(r => r.Name)
+                .IsUnique();
+
+            modelBuilder.Entity<Role>()
+                .OwnsMany(r => r.Scopes)
+                .WithOwner(sc => sc.Role);
+
+            modelBuilder.Entity<Role>()
+                .HasMany(u => u.Users)
+                .WithOne(b => b.Role)
+                .HasForeignKey(b => b.RoleId);
+            #endregion
 
             #region blog
             modelBuilder.Entity<Blog>()
@@ -94,42 +137,6 @@ namespace BlogYes.Infrastructure.DbContexts
                 .HasMany(c => c.Blogs)
                 .WithOne(b => b.Category)
                 .HasForeignKey(b => b.CategoryId);
-            #endregion
-
-            #region user
-            modelBuilder.Entity<User>()
-                .HasIndex(u => u.Username)
-                .IsUnique();
-
-            modelBuilder.Entity<User>()
-                .HasIndex(u => u.Password);
-
-            modelBuilder.Entity<User>()
-                .HasIndex(u => u.SoftDeleted);
-
-            modelBuilder.Entity<User>()
-                .OwnsOne(u => u.Settings);
-
-            modelBuilder.Entity<User>()
-                .OwnsOne(u => u.Detail);
-
-            modelBuilder.Entity<User>()
-                .HasMany(u => u.Blogs)
-                .WithOne(b => b.User)
-                .HasForeignKey(b => b.UserId);
-            #endregion
-
-            #region role
-            modelBuilder.Entity<Role>()
-                .HasIndex(u => u.SoftDeleted);
-
-            modelBuilder.Entity<Role>()
-                .OwnsMany(r => r.Scopes);
-
-            modelBuilder.Entity<Role>()
-                .HasMany(u => u.Users)
-                .WithOne(b => b.Role)
-                .HasForeignKey(b => b.RoleId);
             #endregion
 
             #endregion

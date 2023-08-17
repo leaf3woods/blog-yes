@@ -1,12 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AutoMapper;
+using BlogYes.Application.Dtos;
+using BlogYes.Domain.Entities;
+using BlogYes.Domain.ValueObjects.UserValue;
 
 namespace BlogYes.Application.Utilities.MapperProfiles.DtoProfiles
 {
-    internal class RoleDtoProfile
+    public class RoleDtoProfile : Profile
     {
+        public RoleDtoProfile()
+        {
+            CreateMap<RoleCreateDto, Role>();
+            CreateMap<Role, RoleReadDto>();
+            CreateMap<Scope, RoleScopeReadDto>();
+            CreateMap<RoleScopeModifyDto, Scope>();
+        }
     }
 }

@@ -2,8 +2,10 @@
 using BlogYes.Application.Services.Base;
 using BlogYes.Application.Utilities;
 using BlogYes.Core;
+using BlogYes.Core.Utilities;
 using BlogYes.Domain.Entities;
 using BlogYes.Domain.Repositories;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace BlogYes.Application.Services
@@ -11,12 +13,16 @@ namespace BlogYes.Application.Services
     public class UserService : BaseService, IUserService
     {
         public UserService(
-            IUserRepository userRepository)
+            IUserRepository userRepository,
+            IRoleRepository roleRepository
+            )
         {
             _userRepository = userRepository;
+            _roleRepository = roleRepository;
         }
 
         private readonly IUserRepository _userRepository;
+        private readonly IRoleRepository _roleRepository;
 
         public async Task<int> RegisterAsync(UserRegisterDto registerDto)
         {
@@ -42,19 +48,28 @@ namespace BlogYes.Application.Services
             return await _userRepository.DeleteAsync(id);
         }
 
-        public async Task<UserReadDto> GetUserAsync(Guid userId)
+        public async Task<UserReadDto> GetUserAsync(Guid id)
         {
-            var user = await _userRepository.GetAsync(userId);
+            var user = await _userRepository.FindAsync(id);
             var result = Mapper.Map<UserReadDto>(user);
             return result;
         }
 
         public async Task<IEnumerable<UserReadDto>> GetUsersAsync()
         {
-            var users = await _userRepository.GetAllAsync();
+            var users = await _userRepository.GetQueryWhere().ToArrayAsync();
             var results = Mapper.Map<IEnumerable<UserReadDto>>(users);
             return results;
         }
 
+        public async Task<int> ChangeRole(Guid userId, Guid roleId)
+        {
+            var user = (await _userRepository.FindAsync(userId)) ??
+                throw new Exception("user not find");
+            if(await _userRepository.FindAsync(roleId) is null) 
+                throw new Exception("role not find");
+            user.RoleId = roleId;
+            return await _userRepository.UpdateAsync(user);
+        }
     }
 }
