@@ -1,5 +1,4 @@
-﻿
-namespace BlogYes.Application.Services.Base
+﻿namespace BlogYes.Application.Services.Base
 {
     public interface IBaseService
     {

@@ -57,6 +57,5 @@ namespace BlogYes.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Authorize(Policy = $"{ManagedResource.Role}.{ManagedAction.Read}.{"Scopes"}")]
         public ActionResult<IEnumerable<RoleScopeReadDto>> GetSupportedScopes() => Ok(_roleService.GetScopes());
-
     }
 }

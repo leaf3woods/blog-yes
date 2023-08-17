@@ -33,7 +33,6 @@ namespace BlogYes.Infrastructure.Repositories
             return await DbContext.SaveChangesAsync();
         }
 
-
         public async Task<Blog?> GetAsync(long key) =>
             await DbContext.Set<Blog>()
                 .AsNoTracking()

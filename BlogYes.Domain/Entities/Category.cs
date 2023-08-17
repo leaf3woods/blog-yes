@@ -9,12 +9,16 @@ namespace BlogYes.Domain.Entities
         public DateTime CreateTime { get; set; }
 
         #region navigation
+
         public virtual ICollection<Blog> Blogs { get; set; } = null!;
-        #endregion
+
+        #endregion navigation
 
         #region delete filter
+
         public bool SoftDeleted { get; set; } = false;
         public DateTime? DeleteTime { get; set; } = null;
-        #endregion
+
+        #endregion delete filter
     }
 }

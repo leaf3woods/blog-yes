@@ -1,6 +1,4 @@
-﻿
-
-namespace BlogYes.Core
+﻿namespace BlogYes.Core
 {
     public static class CustomClaimsType
     {

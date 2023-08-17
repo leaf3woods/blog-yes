@@ -13,17 +13,21 @@ namespace BlogYes.Domain.Entities
         public BlogState State { get; set; }
 
         #region navigation
+
         public Guid UserId { get; set; }
         public virtual User User { get; set; } = null!;
         public long CategoryId { get; set; }
         public virtual Category? Category { get; set; } = null!;
         public ICollection<Comment>? Comments { get; set; }
-        #endregion
+
+        #endregion navigation
 
         #region delete filter
+
         public bool SoftDeleted { get; set; } = false;
         public DateTime? DeleteTime { get; set; } = null;
-        #endregion
+
+        #endregion delete filter
     }
 
     public enum BlogState

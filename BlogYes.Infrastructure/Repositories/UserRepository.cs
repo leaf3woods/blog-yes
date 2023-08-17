@@ -11,13 +11,13 @@ namespace BlogYes.Infrastructure.Repositories
         public UserRepository(
             IDbContextFactory<PgDbContext> dbContextFactory,
             IConfiguration configuration
-        )  : base( dbContextFactory, configuration ) { }
+        ) : base(dbContextFactory, configuration) { }
 
         public async Task<int> DeleteAsync(Guid key)
         {
             var user = await DbContext.Set<User>()
                 .FindAsync(key);
-            if(user is null)
+            if (user is null)
             {
                 throw new Exception("user id is not exist!");
             }
@@ -34,7 +34,6 @@ namespace BlogYes.Infrastructure.Repositories
             return result;
         }
 
-
         public async Task<User?> FindAsync(string username, bool tracking = true)
         {
             var set = DbContext.Set<User>();
@@ -43,7 +42,6 @@ namespace BlogYes.Infrastructure.Repositories
                 .SingleOrDefaultAsync(u => u.Username == username);
             return result;
         }
-
 
         public async Task<int> UpdateAsync(User modifiedUser)
         {

@@ -1,5 +1,4 @@
-﻿
-namespace BlogYes.Core
+﻿namespace BlogYes.Core
 {
     public class PaginatedList<T>
     {
@@ -9,6 +8,7 @@ namespace BlogYes.Core
             TotalItems = totalItems; PageIndex = pageIndex; PageSize = pageSize;
             TotalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
         }
+
         public long TotalItems { get; init; }
         public long PageIndex { get; init; }
         public int PageSize { get; init; }

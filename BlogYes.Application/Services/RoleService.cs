@@ -44,7 +44,7 @@ namespace BlogYes.Application.Services
         [Scope("get all roles", ManagedResource.Role, ManagedAction.Read, ManagedItem.All)]
         public async Task<IEnumerable<RoleReadDto>> GetRolesAsync()
         {
-            var roles =  await _roleRepository.GetQueryWhere().ToArrayAsync();
+            var roles = await _roleRepository.GetQueryWhere().ToArrayAsync();
             var dtos = Mapper.Map<IEnumerable<RoleReadDto>>(roles);
             return dtos;
         }
@@ -52,15 +52,14 @@ namespace BlogYes.Application.Services
         [Scope("change role manage scope", ManagedResource.Role, ManagedAction.Update, "Scopes")]
         public async Task<int> ModifyRoleScopeAsync(Guid roleId, List<string> scopes)
         {
-            
-            if(RequireScopeUtil.TryFillAll(scopes, out var fullScopes))
+            if (RequireScopeUtil.TryFillAll(scopes, out var fullScopes))
             {
                 throw new Exception("unsupported scope find");
             }
             var role = (await _roleRepository.FindAsync(roleId)) ??
                 throw new Exception("role is not exist");
             role.Scopes = fullScopes;
-            return await _roleRepository.UpdateAsync(role);         
+            return await _roleRepository.UpdateAsync(role);
         }
 
         [Scope("get all supported scopes", ManagedResource.Role, ManagedAction.Read, "Scopes")]

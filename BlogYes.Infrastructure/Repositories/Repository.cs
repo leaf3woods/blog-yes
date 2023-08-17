@@ -22,9 +22,8 @@ namespace BlogYes.Infrastructure.Repositories
         }
 
         private readonly IConfiguration _configuration;
-        private Lazy<PgDbContext> _lazyContext  { get; init; }
-        public PgDbContext DbContext { get => _lazyContext.Value;}
-
+        private Lazy<PgDbContext> _lazyContext { get; init; }
+        public PgDbContext DbContext { get => _lazyContext.Value; }
 
         public async Task<int> CreateAsync(TEntity entity)
         {
@@ -35,7 +34,7 @@ namespace BlogYes.Infrastructure.Repositories
 
         public async Task<int> CreateRangeAsync(IEnumerable<TEntity> entities)
         {
-            if(entities.Count() != 0)
+            if (entities.Count() != 0)
             {
                 await DbContext.Set<TEntity>().AddRangeAsync(entities);
             }

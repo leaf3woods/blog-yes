@@ -1,9 +1,8 @@
-﻿
-using BlogYes.Application.Services.Base;
+﻿using BlogYes.Application.Services.Base;
 
 namespace BlogYes.Application.Services
 {
-    public class SettingService: BaseService, ISettingService
+    public class SettingService : BaseService, ISettingService
     {
     }
 }

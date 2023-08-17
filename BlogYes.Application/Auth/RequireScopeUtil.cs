@@ -28,7 +28,7 @@ namespace BlogYes.Application.Auth
 
         public static bool IsExist(string scopeName) => Scopes.Any(s => s.Name == scopeName);
 
-        public static Scope? Fill(string scopeName) =>  Scopes.FirstOrDefault(s => s.Name == scopeName);
+        public static Scope? Fill(string scopeName) => Scopes.FirstOrDefault(s => s.Name == scopeName);
 
         public static IEnumerable<Scope> FillAll(IEnumerable<string> scopeNames)
         {
@@ -56,7 +56,7 @@ namespace BlogYes.Application.Auth
             while (enumerator.MoveNext())
             {
                 var fullScope = Fill(enumerator.Current);
-                if(fullScope is null)
+                if (fullScope is null)
                 {
                     fullScopes = result;
                     return false;
@@ -69,6 +69,5 @@ namespace BlogYes.Application.Auth
             fullScopes = result;
             return true;
         }
-
     }
 }

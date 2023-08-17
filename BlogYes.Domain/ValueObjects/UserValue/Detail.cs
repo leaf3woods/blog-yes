@@ -1,5 +1,4 @@
-﻿
-using BlogYes.Domain.Entities;
+﻿using BlogYes.Domain.Entities;
 
 namespace BlogYes.Domain.ValueObjects.UserValue
 {
@@ -9,9 +8,12 @@ namespace BlogYes.Domain.ValueObjects.UserValue
         public string? AboutMe { get; set; }
 
         #region navigation
+
         public User User { get; set; } = null!;
-        #endregion
+
+        #endregion navigation
     }
+
     public enum Gender
     {
         Male,

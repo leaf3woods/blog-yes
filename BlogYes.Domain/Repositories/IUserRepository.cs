@@ -1,9 +1,8 @@
-﻿
-using BlogYes.Domain.Entities;
+﻿using BlogYes.Domain.Entities;
 
 namespace BlogYes.Domain.Repositories
 {
-    public interface IUserRepository : IRepository<User>    
+    public interface IUserRepository : IRepository<User>
     {
         public Task<int> DeleteAsync(Guid key);
 
@@ -12,6 +11,5 @@ namespace BlogYes.Domain.Repositories
         public Task<User?> FindAsync(string username, bool tracking = true);
 
         public Task<int> UpdateAsync(User modifiedUser);
-
     }
 }

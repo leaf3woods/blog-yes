@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 namespace BlogYes.Domain.Repositories
 {
-    public interface IRepository<TEntity> 
+    public interface IRepository<TEntity>
         where TEntity : class, IAggregateRoot, new()
     {
         public Task<int> CreateAsync(TEntity dto);

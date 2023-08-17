@@ -8,6 +8,7 @@ namespace BlogYes.Application.Auth.Requirements
         {
             Scope = ManagedResource.User + string.Join('.', scopes);
         }
-        public string Scope { get; private set;}
+
+        public string Scope { get; private set; }
     }
 }

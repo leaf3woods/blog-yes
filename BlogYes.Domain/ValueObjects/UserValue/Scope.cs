@@ -8,8 +8,10 @@ namespace BlogYes.Domain.ValueObjects.UserValue
         public string? Description { get; set; }
 
         #region navigation
+
         public virtual Role Role { get; set; } = null!;
-        #endregion
+
+        #endregion navigation
 
         public static Scope FromString(string scopeName) => new Scope { Name = scopeName };
 

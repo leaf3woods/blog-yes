@@ -2,18 +2,15 @@
 
 namespace BlogYes.Application.Dtos
 {
-        public class BlogCreateDto : CreateDto
-        {            
-            
-        }
-        
-        public class BlogUpdateDto : UpdateDto
-        {            
-            
-        }            
-        
-        public class BlogReadDto : UpdateDto
-        {
-            
-        }
+    public class BlogCreateDto : CreateDto
+    {
+    }
+
+    public class BlogUpdateDto : UpdateDto
+    {
+    }
+
+    public class BlogReadDto : UpdateDto
+    {
+    }
 }

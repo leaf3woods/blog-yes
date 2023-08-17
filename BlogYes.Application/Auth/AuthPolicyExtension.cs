@@ -6,7 +6,7 @@ namespace BlogYes.Application.Auth
 {
     public static class AuthPolicyExtension
     {
-        public static void AddPolicyExt(this AuthorizationOptions options, IEnumerable<Scope> scopes) 
+        public static void AddPolicyExt(this AuthorizationOptions options, IEnumerable<Scope> scopes)
         {
             var userScopes = new List<UserRequireScope>();
             var roleScopes = new List<RoleRequireScope>();
@@ -24,6 +24,7 @@ namespace BlogYes.Application.Auth
                         options.AddPolicy(scope.Name, policy => policy.AddRequirements(urs));
                         userScopes.Add(urs);
                         break;
+
                     case ManagedResource.Role:
                         var rrs = new RoleRequireScope(parts[1..]);
                         options.AddPolicy(scope.Name, policy => policy.AddRequirements(rrs));
@@ -34,6 +35,5 @@ namespace BlogYes.Application.Auth
             options.AddPolicy(ManagedResource.User, policy => policy.AddRequirements(userScopes.ToArray()));
             options.AddPolicy(ManagedResource.Role, policy => policy.AddRequirements(roleScopes.ToArray()));
         }
-
     }
 }

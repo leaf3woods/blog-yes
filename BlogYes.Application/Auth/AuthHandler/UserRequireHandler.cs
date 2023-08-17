@@ -20,7 +20,7 @@ namespace BlogYes.Application.Auth.AuthHandler
             var userId = Guid.Parse(dict[CustomClaimsType.UserId]);
             var scopes = dict[CustomClaimsType.Scopes].Split(',');
             var role = dict[CustomClaimsType.Role];
-            if(role == Options.SuperRole || scopes.Any(s => requirement.Scope.StartsWith(s)))
+            if (role == Options.SuperRole || scopes.Any(s => requirement.Scope.StartsWith(s)))
             {
                 context.Succeed(requirement);
             }

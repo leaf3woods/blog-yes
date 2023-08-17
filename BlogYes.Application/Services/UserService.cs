@@ -57,6 +57,7 @@ namespace BlogYes.Application.Services
             var result = Mapper.Map<UserReadDto>(user);
             return result;
         }
+
         [Scope("get all users", ManagedResource.User, ManagedAction.Read, ManagedItem.All)]
         public async Task<IEnumerable<UserReadDto>> GetUsersAsync()
         {
@@ -69,7 +70,7 @@ namespace BlogYes.Application.Services
         {
             var user = (await _userRepository.FindAsync(userId)) ??
                 throw new Exception("user not find");
-            if(await _userRepository.FindAsync(roleId) is null) 
+            if (await _userRepository.FindAsync(roleId) is null)
                 throw new Exception("role not find");
             user.RoleId = roleId;
             return await _userRepository.UpdateAsync(user);

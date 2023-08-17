@@ -6,17 +6,19 @@ namespace BlogYes.Infrastructure.DbContexts
 {
     public class PgDbContext : DbContext
     {
-        public PgDbContext(DbContextOptions<PgDbContext> options) : base(options) { }
+        public PgDbContext(DbContextOptions<PgDbContext> options) : base(options)
+        {
+        }
 
         #region dbsets
 
         public DbSet<User> User { get; set; }
         public DbSet<Role> Role { get; set; }
         public DbSet<Blog> Blog { get; set; }
-        public  DbSet<Comment> Comment { get; set; }
-        public  DbSet<Category> Category { get; set; }
+        public DbSet<Comment> Comment { get; set; }
+        public DbSet<Category> Category { get; set; }
 
-        #endregion
+        #endregion dbsets
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
@@ -34,8 +36,8 @@ namespace BlogYes.Infrastructure.DbContexts
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
             #region soft delete filter
+
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
                 if (typeof(ISoftDelete).IsAssignableFrom(entityType.ClrType))
@@ -43,12 +45,13 @@ namespace BlogYes.Infrastructure.DbContexts
                     entityType.AddSoftDeleteQueryFilter();
                 }
             }
-            #endregion
 
+            #endregion soft delete filter
 
             #region entities relationship
 
             #region user
+
             modelBuilder.Entity<User>()
                 .HasIndex(u => u.Username)
                 .IsUnique();
@@ -69,9 +72,11 @@ namespace BlogYes.Infrastructure.DbContexts
                 .HasMany(u => u.Blogs)
                 .WithOne(b => b.User)
                 .HasForeignKey(b => b.UserId);
-            #endregion
+
+            #endregion user
 
             #region role
+
             modelBuilder.Entity<Role>()
                 .HasIndex(u => u.SoftDeleted);
 
@@ -87,9 +92,11 @@ namespace BlogYes.Infrastructure.DbContexts
                 .HasMany(u => u.Users)
                 .WithOne(b => b.Role)
                 .HasForeignKey(b => b.RoleId);
-            #endregion
+
+            #endregion role
 
             #region blog
+
             modelBuilder.Entity<Blog>()
                 .HasIndex(b => b.ModifyTime)
                 .IsDescending();
@@ -113,18 +120,22 @@ namespace BlogYes.Infrastructure.DbContexts
                 .HasOne(b => b.Category)
                 .WithMany(c => c.Blogs)
                 .HasForeignKey(b => b.CategoryId);
-            #endregion
+
+            #endregion blog
 
             #region comment
+
             modelBuilder.Entity<Comment>()
                 .HasIndex(c => c.SoftDeleted);
 
             modelBuilder.Entity<Comment>()
                 .HasIndex(c => c.PostTime)
                 .IsDescending();
-            #endregion
+
+            #endregion comment
 
             #region category
+
             modelBuilder.Entity<Category>()
                 .HasIndex(b => b.SoftDeleted);
 
@@ -135,9 +146,10 @@ namespace BlogYes.Infrastructure.DbContexts
                 .HasMany(c => c.Blogs)
                 .WithOne(b => b.Category)
                 .HasForeignKey(b => b.CategoryId);
-            #endregion
 
-            #endregion
+            #endregion category
+
+            #endregion entities relationship
         }
     }
 }

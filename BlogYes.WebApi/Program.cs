@@ -1,22 +1,24 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using BlogYes.Application.Auth;
+using BlogYes.Application.Utilities;
+using BlogYes.Core.Utilities;
 using BlogYes.Infrastructure.DbContexts;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Npgsql;
 using System.Reflection;
-using BlogYes.Application.Utilities;
-using BlogYes.Core.Utilities;
-using BlogYes.Application.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
 
 #region util Initialize
+
 RequireScopeUtil.Initialize();
 SettingUtil.Initialize(builder.Configuration);
 EncryptUtil.Initialize(SettingUtil.Jwt.KeyFolder);
-#endregion
+
+#endregion util Initialize
 
 // Change container to autoFac
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
@@ -41,7 +43,6 @@ builder.Services.AddAuthentication(options =>
 {
     option.TokenValidationParameters = new TokenValidationParameters
     {
-
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new ECDsaSecurityKey(EncryptUtil.ECDsa),    // Use ECDsa
         ValidAlgorithms = new[] { SecurityAlgorithms.EcdsaSha256 },

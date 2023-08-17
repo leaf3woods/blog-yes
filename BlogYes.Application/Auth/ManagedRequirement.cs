@@ -1,6 +1,4 @@
-﻿
-
-namespace BlogYes.Application.Auth
+﻿namespace BlogYes.Application.Auth
 {
     public static class ManagedAction
     {

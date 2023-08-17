@@ -9,6 +9,5 @@ namespace BlogYes.Domain.Repositories
         public Task<int> DeleteRangeAsync(IEnumerable<long> ids);
 
         public Task<Blog?> GetAsync(long key);
-
     }
 }

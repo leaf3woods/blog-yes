@@ -8,7 +8,9 @@ namespace BlogYes.Domain.ValueObjects.BlogValue
         public string Description { get; set; } = null!;
 
         #region navigation
+
         public Blog Blog { get; set; } = null!;
-        #endregion
+
+        #endregion navigation
     }
 }

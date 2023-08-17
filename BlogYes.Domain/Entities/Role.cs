@@ -9,13 +9,17 @@ namespace BlogYes.Domain.Entities
         public string Description { get; set; } = null!;
 
         #region navigation
+
         public ICollection<Scope> Scopes { get; set; } = null!;
         public virtual ICollection<User>? Users { get; set; }
-        #endregion
+
+        #endregion navigation
 
         #region delete filter
+
         public bool SoftDeleted { get; set; } = false;
         public DateTime? DeleteTime { get; set; } = null;
-        #endregion
+
+        #endregion delete filter
     }
 }

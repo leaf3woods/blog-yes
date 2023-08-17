@@ -6,6 +6,5 @@ namespace BlogYes.WebApi.Controllers
     [ApiController]
     public class HomeController : ControllerBase
     {
-
     }
 }

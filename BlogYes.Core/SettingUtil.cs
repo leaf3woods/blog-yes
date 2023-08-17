@@ -25,6 +25,5 @@ namespace BlogYes.Core.Utilities
             public string Audience { get; set; } = null!;
             public TimeSpan ExpireMin { get; set; }
         }
-
     }
 }

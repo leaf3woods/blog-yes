@@ -1,6 +1,5 @@
 ﻿using BlogYes.Domain.Entities;
 using BlogYes.Domain.Repositories;
-using BlogYes.Domain.ValueObjects.UserValue;
 using BlogYes.Infrastructure.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -12,12 +11,12 @@ namespace BlogYes.Infrastructure.Repositories
         public RoleRepository(
                 IDbContextFactory<PgDbContext> dbContextFactory,
                 IConfiguration configuration
-            ) : base( dbContextFactory, configuration ) { }
+            ) : base(dbContextFactory, configuration) { }
 
         public async Task<int> DeleteAsync(Guid key)
         {
             var role = await DbContext.Set<Role>().FindAsync(key);
-            if(role is null)
+            if (role is null)
             {
                 throw new Exception("role not exist");
             }
