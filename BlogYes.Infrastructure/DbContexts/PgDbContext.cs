@@ -22,11 +22,11 @@ namespace BlogYes.Infrastructure.DbContexts
         {
             foreach (var entityEntry in ChangeTracker.Entries())
             {
-
                 if (entityEntry.State == EntityState.Deleted && entityEntry.Entity is ISoftDelete delete)
                 {
                     entityEntry.State = EntityState.Unchanged;
                     delete.SoftDeleted = true;
+                    delete.DeleteTime = DateTime.UtcNow;
                 }
             }
             return base.SaveChangesAsync(cancellationToken);

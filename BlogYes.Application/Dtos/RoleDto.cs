@@ -5,6 +5,7 @@ namespace BlogYes.Application.Dtos
     public class RoleCreateDto : CreateDto
     {
         public string Name { get; set; } = null!;
+        public string Description { get; set; } = null!;
         public IEnumerable<RoleScopeModifyDto> Scopes { get; set; } = null!;
     }
 
@@ -12,6 +13,7 @@ namespace BlogYes.Application.Dtos
     {
         public Guid Id { get; set; }
         public string Name { get; set; } = null!;
+        public string Description { get; set; } = null!;
         public IEnumerable<RoleScopeReadDto> Scopes { get; set; } = null!;
     }
 

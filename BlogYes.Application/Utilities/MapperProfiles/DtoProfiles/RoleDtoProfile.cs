@@ -12,7 +12,9 @@ namespace BlogYes.Application.Utilities.MapperProfiles.DtoProfiles
             CreateMap<RoleCreateDto, Role>();
             CreateMap<Role, RoleReadDto>();
             CreateMap<Scope, RoleScopeReadDto>();
-            CreateMap<RoleScopeModifyDto, Scope>();
+            CreateMap<RoleScopeModifyDto, Scope>()
+                .ForMember(dest => dest.Description,
+                options => options.MapFrom(src => string.IsNullOrEmpty(src.Description) ? null : src.Description));
         }
     }
 }

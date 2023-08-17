@@ -13,8 +13,9 @@ namespace BlogYes.Domain.Entities
         public virtual ICollection<User>? Users { get; set; }
         #endregion
 
-        #region filter
+        #region delete filter
         public bool SoftDeleted { get; set; } = false;
+        public DateTime? DeleteTime { get; set; } = null;
         #endregion
     }
 }

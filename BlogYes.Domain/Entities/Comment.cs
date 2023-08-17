@@ -16,8 +16,9 @@ namespace BlogYes.Domain.Entities
         public virtual Blog Blog { get; set; } = null!;
         #endregion
 
-        #region filter
+        #region delete filter
         public bool SoftDeleted { get; set; } = false;
+        public DateTime? DeleteTime { get; set; } = null;
         #endregion
     }
 }

@@ -21,8 +21,9 @@ namespace BlogYes.Domain.Entities
         public virtual Role Role { get; set; } = null!;
         #endregion
 
-        #region filter
+        #region delete filter
         public bool SoftDeleted { get; set; } = false;
+        public DateTime? DeleteTime { get; set; } = null;
         #endregion
     }
 }

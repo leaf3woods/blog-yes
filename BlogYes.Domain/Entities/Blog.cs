@@ -20,8 +20,9 @@ namespace BlogYes.Domain.Entities
         public ICollection<Comment>? Comments { get; set; }
         #endregion
 
-        #region filter
+        #region delete filter
         public bool SoftDeleted { get; set; } = false;
+        public DateTime? DeleteTime { get; set; } = null;
         #endregion
     }
 
