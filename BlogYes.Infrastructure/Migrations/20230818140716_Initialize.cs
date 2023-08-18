@@ -73,7 +73,8 @@ namespace BlogYes.Infrastructure.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Username = table.Column<string>(type: "text", nullable: false),
-                    Password = table.Column<string>(type: "text", nullable: false),
+                    Passphrase = table.Column<string>(type: "text", nullable: false),
+                    Salt = table.Column<string>(type: "text", nullable: false),
                     DisplayName = table.Column<string>(type: "text", nullable: false),
                     Email = table.Column<string>(type: "text", nullable: false),
                     TelephoneNumber = table.Column<string>(type: "text", nullable: false),
@@ -197,8 +198,8 @@ namespace BlogYes.Infrastructure.Migrations
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "Id", "DeleteTime", "DisplayName", "Email", "Password", "RegisterTime", "RoleId", "SoftDeleted", "TelephoneNumber", "Username" },
-                values: new object[] { new Guid("cb29ce61-7255-47d5-b2e6-2eb3434b60cb"), null, "developer", "unknow", "dev@1234", new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new Guid("e8df3280-8ab1-4b45-8d6a-6c3e669317ac"), false, "unknow", "dev" });
+                columns: new[] { "Id", "DeleteTime", "DisplayName", "Email", "Passphrase", "RegisterTime", "RoleId", "Salt", "SoftDeleted", "TelephoneNumber", "Username" },
+                values: new object[] { new Guid("956f383d-1ef3-43b0-b7e0-ac31fc123e46"), null, "developer", "unknow", "Uh+8E9ft9jptdMzAVRKo0UYQtqn5epsbJUZQGbL/Xhk=", new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new Guid("e8df3280-8ab1-4b45-8d6a-6c3e669317ac"), "5+fPPv0FShtKo3ed746TiuNojEZsxuPkhbU+YvF5DuQ=", false, "unknow", "dev" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Blogs_CategoryId",
@@ -268,11 +269,6 @@ namespace BlogYes.Infrastructure.Migrations
                 name: "IX_Roles_SoftDeleted",
                 table: "Roles",
                 column: "SoftDeleted");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_Password",
-                table: "Users",
-                column: "Password");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_RoleId",

@@ -13,6 +13,6 @@ namespace BlogYes.WebApi.Utilities.InjectionModules
                 .PropertiesAutowired();
         }
 
-        private string WithPrefix(string content) => $"BlogYes." + content;
+        private static string WithPrefix(string content) => $"BlogYes." + content;
     }
 }

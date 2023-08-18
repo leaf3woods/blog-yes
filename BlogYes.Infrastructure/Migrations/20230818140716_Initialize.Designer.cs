@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BlogYes.Infrastructure.Migrations
 {
     [DbContext(typeof(PgDbContext))]
-    [Migration("20230818031427_Initialize")]
+    [Migration("20230818140716_Initialize")]
     partial class Initialize
     {
         /// <inheritdoc />
@@ -250,7 +250,7 @@ namespace BlogYes.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Password")
+                    b.Property<string>("Passphrase")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -259,6 +259,10 @@ namespace BlogYes.Infrastructure.Migrations
 
                     b.Property<Guid>("RoleId")
                         .HasColumnType("uuid");
+
+                    b.Property<string>("Salt")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<bool>("SoftDeleted")
                         .HasColumnType("boolean");
@@ -273,8 +277,6 @@ namespace BlogYes.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Password");
-
                     b.HasIndex("RoleId");
 
                     b.HasIndex("SoftDeleted");
@@ -287,12 +289,13 @@ namespace BlogYes.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("cb29ce61-7255-47d5-b2e6-2eb3434b60cb"),
+                            Id = new Guid("956f383d-1ef3-43b0-b7e0-ac31fc123e46"),
                             DisplayName = "developer",
                             Email = "unknow",
-                            Password = "dev@1234",
+                            Passphrase = "Uh+8E9ft9jptdMzAVRKo0UYQtqn5epsbJUZQGbL/Xhk=",
                             RegisterTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
                             RoleId = new Guid("e8df3280-8ab1-4b45-8d6a-6c3e669317ac"),
+                            Salt = "5+fPPv0FShtKo3ed746TiuNojEZsxuPkhbU+YvF5DuQ=",
                             SoftDeleted = false,
                             TelephoneNumber = "unknow",
                             Username = "dev"

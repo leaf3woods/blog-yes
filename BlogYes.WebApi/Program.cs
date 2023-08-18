@@ -18,7 +18,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 RequireScopeUtil.Initialize();
 SettingUtil.Initialize(builder.Configuration);
-EncryptUtil.Initialize(SettingUtil.Jwt.KeyFolder);
+CryptoUtil.Initialize(SettingUtil.Jwt.KeyFolder);
 
 #endregion util Initialize
 
@@ -28,13 +28,13 @@ builder.Host.ConfigureContainer<ContainerBuilder>(config =>
     config.RegisterAssemblyModules(Assembly.GetExecutingAssembly(), Assembly.Load("BlogYes." + nameof(BlogYes.Application))));
 
 // Add services to the container.
-builder.Services.AddLogging();
 builder.Host.UseSerilog((context, logger) =>
 {
     logger.ReadFrom.Configuration(context.Configuration);
     logger.Enrich.FromLogContext();
 });
 
+builder.Services.AddLogging();
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
 builder.Services.AddControllers().AddJsonOptions(config =>
 {
@@ -52,15 +52,14 @@ builder.Services.AddAuthentication(options =>
     option.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new ECDsaSecurityKey(EncryptUtil.pubECDsa),    // Use ECDsa
+        IssuerSigningKey = new ECDsaSecurityKey(CryptoUtil.PublicECDsa),    // Use ECDsa
         ValidAlgorithms = new[] { SecurityAlgorithms.EcdsaSha256 },
         ValidateIssuer = true,
         ValidIssuer = SettingUtil.Jwt.Issuer,
         ValidateAudience = true,
         ValidAudience = SettingUtil.Jwt.Audience,
         RequireExpirationTime = true,
-        ValidateLifetime = true,
-        ClockSkew = SettingUtil.Jwt.ExpireMin
+        ValidateLifetime = true
     };
 });
 

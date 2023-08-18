@@ -8,6 +8,7 @@ namespace BlogYes.Application.Auth
     {
         public static void AddPolicyExt(this AuthorizationOptions options, IEnumerable<Scope> scopes)
         {
+            options.InvokeHandlersAfterFailure = true;
             var userScopes = new List<UserRequireScope>();
             var roleScopes = new List<RoleRequireScope>();
             foreach (var scope in scopes)

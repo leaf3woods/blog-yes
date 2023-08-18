@@ -77,12 +77,10 @@ namespace BlogYes.Infrastructure.DbContexts
 
             modelBuilder.Entity<User>()
                 .HasData(User.Seeds);
+
             modelBuilder.Entity<User>()
                 .HasIndex(u => u.Username)
                 .IsUnique();
-
-            modelBuilder.Entity<User>()
-                .HasIndex(u => u.Password);
 
             modelBuilder.Entity<User>()
                 .HasIndex(u => u.SoftDeleted);

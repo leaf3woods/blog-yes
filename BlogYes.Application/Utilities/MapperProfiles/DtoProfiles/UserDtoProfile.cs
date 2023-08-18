@@ -10,7 +10,13 @@ namespace BlogYes.Application.Utilities.MapperProfiles.DtoProfiles
         public UserDtoProfile()
         {
             CreateMap<User, UserReadDto>();
-            CreateMap<UserRegisterDto, User>();
+            CreateMap<UserRegisterDto, User>()
+                .AfterMap((src, dest) =>
+                {
+                    var bytes = Convert.FromBase64String(src.Password);
+                    dest.Passphrase = Convert.ToBase64String(CryptoUtil.Salt(bytes, out var salt));
+                    dest.Salt = Convert.ToBase64String(salt);
+                });
             CreateMap<Setting, UserSettingReadDto>();
             CreateMap<Setting, UserDetailReadDto>();
         }

@@ -6,7 +6,8 @@ namespace BlogYes.Domain.Entities
     public class User : UniversalEntity, ISoftDelete
     {
         public string Username { get; set; } = null!;
-        public string Password { get; set; } = null!;
+        public string Passphrase { get; set; } = null!;
+        public string Salt { get; set; } = null!;
         public string DisplayName { get; set; } = null!;
         public string Email { get; set; } = null!;
         public string TelephoneNumber { get; set; } = null!;
@@ -33,7 +34,8 @@ namespace BlogYes.Domain.Entities
         public readonly static User DevUser = new()
         {
             Username = "dev",
-            Password = "dev@1234",
+            Passphrase = "Uh+8E9ft9jptdMzAVRKo0UYQtqn5epsbJUZQGbL/Xhk=",
+            Salt = "5+fPPv0FShtKo3ed746TiuNojEZsxuPkhbU+YvF5DuQ=",
             DisplayName = "developer",
             Email = "unknow",
             TelephoneNumber = "unknow",

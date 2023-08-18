@@ -2,8 +2,7 @@
 {
     public static class CustomClaimsType
     {
-        public const string UserId = "user-guid";
-        public const string Role = "role-name";
-        public const string Scopes = "role-scopes";
+        public const string UserId = "uid";
+        public const string RoleId = "rid";
     }
 }

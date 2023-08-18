@@ -32,13 +32,14 @@ namespace BlogYes.Application.Services
         public async Task<string> LoginAsync(UserLoginDto credential)
         {
             var user = await _userRepository.FindAsync(credential.Username);
-            if (user is null || user.Password != credential.Password)
+            var bytes = Convert.FromBase64String(credential.Password);
+            if (user is null || !user.Verify(bytes))
             {
                 throw new Exception("user not exist or password error");
             }
             var scopeNames = user.Role.Scopes.Select(x => x.Name);
-            var token = EncryptUtil.GenerateJwtToken(SettingUtil.Jwt.Issuer, SettingUtil.Jwt.Audience, SettingUtil.Jwt.ExpireMin,
-                new Claim(CustomClaimsType.UserId, user.Id.ToString()), new Claim(CustomClaimsType.Role, user.Role.Name)) ??
+            var token = CryptoUtil.GenerateJwtToken(SettingUtil.Jwt.Issuer, SettingUtil.Jwt.Audience, SettingUtil.Jwt.ExpireMin,
+                new Claim(CustomClaimsType.UserId, user.Id.ToString()), new Claim(CustomClaimsType.RoleId, user.Role.Id.ToString())) ??
                 throw new Exception("generate jwt token error");
             return token;
         }
