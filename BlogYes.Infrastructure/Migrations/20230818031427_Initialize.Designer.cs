@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BlogYes.Infrastructure.Migrations
 {
     [DbContext(typeof(PgDbContext))]
-    [Migration("20230816051533_Initialize")]
+    [Migration("20230818031427_Initialize")]
     partial class Initialize
     {
         /// <inheritdoc />
@@ -41,6 +41,9 @@ namespace BlogYes.Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreateTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("DeleteTime")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime>("ModifyTime")
@@ -73,7 +76,7 @@ namespace BlogYes.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Blog");
+                    b.ToTable("Blogs");
                 });
 
             modelBuilder.Entity("BlogYes.Domain.Entities.Category", b =>
@@ -85,6 +88,9 @@ namespace BlogYes.Infrastructure.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<DateTime>("CreateTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("DeleteTime")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
@@ -104,7 +110,7 @@ namespace BlogYes.Infrastructure.Migrations
 
                     b.HasIndex("SoftDeleted");
 
-                    b.ToTable("Category");
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("BlogYes.Domain.Entities.Comment", b =>
@@ -117,6 +123,9 @@ namespace BlogYes.Infrastructure.Migrations
 
                     b.Property<long>("BlogId")
                         .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("DeleteTime")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<long>("Like")
                         .HasColumnType("bigint");
@@ -147,7 +156,7 @@ namespace BlogYes.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Comment");
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("BlogYes.Domain.Entities.Role", b =>
@@ -156,14 +165,72 @@ namespace BlogYes.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<DateTime?>("DeleteTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<bool>("SoftDeleted")
                         .HasColumnType("boolean");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Name")
+                        .IsUnique();
+
                     b.HasIndex("SoftDeleted");
 
-                    b.ToTable("Role");
+                    b.ToTable("Roles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("e8df3280-8ab1-4b45-8d6a-6c3e669317ac"),
+                            Description = "developer with all cathable resources even it was obselete",
+                            Name = "developer",
+                            SoftDeleted = false
+                        },
+                        new
+                        {
+                            Id = new Guid("4fe6ebb8-5001-40b4-a59e-d193ad9186f8"),
+                            Description = "super user with all catchable resources",
+                            Name = "super",
+                            SoftDeleted = false
+                        },
+                        new
+                        {
+                            Id = new Guid("e1f23f37-919c-453b-aff1-1214415e54b8"),
+                            Description = "admin to manage all resourcs",
+                            Name = "admin",
+                            SoftDeleted = false
+                        },
+                        new
+                        {
+                            Id = new Guid("cbc91154-913e-40ba-aa9b-4ebb551bac99"),
+                            Description = "import user with some special resources",
+                            Name = "vip",
+                            SoftDeleted = false
+                        },
+                        new
+                        {
+                            Id = new Guid("4a15f57a-0cb7-4cc9-95c0-91ba672a341c"),
+                            Description = "normal user with some basic resources",
+                            Name = "member",
+                            SoftDeleted = false
+                        },
+                        new
+                        {
+                            Id = new Guid("ffce17eb-a74c-4b44-aaac-2e2e78e04f9e"),
+                            Description = "a visitor with some read resources",
+                            Name = "visitor",
+                            SoftDeleted = false
+                        });
                 });
 
             modelBuilder.Entity("BlogYes.Domain.Entities.User", b =>
@@ -171,6 +238,9 @@ namespace BlogYes.Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("DeleteTime")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DisplayName")
                         .IsRequired()
@@ -212,7 +282,21 @@ namespace BlogYes.Infrastructure.Migrations
                     b.HasIndex("Username")
                         .IsUnique();
 
-                    b.ToTable("User");
+                    b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("cb29ce61-7255-47d5-b2e6-2eb3434b60cb"),
+                            DisplayName = "developer",
+                            Email = "unknow",
+                            Password = "dev@1234",
+                            RegisterTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            RoleId = new Guid("e8df3280-8ab1-4b45-8d6a-6c3e669317ac"),
+                            SoftDeleted = false,
+                            TelephoneNumber = "unknow",
+                            Username = "dev"
+                        });
                 });
 
             modelBuilder.Entity("BlogYes.Domain.Entities.Blog", b =>
@@ -229,7 +313,7 @@ namespace BlogYes.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsMany("BlogYes.Domain.ValueObjects.Blog.Tag", "Tags", b1 =>
+                    b.OwnsMany("BlogYes.Domain.ValueObjects.BlogValue.Tag", "Tags", b1 =>
                         {
                             b1.Property<long>("BlogId")
                                 .HasColumnType("bigint");
@@ -252,8 +336,10 @@ namespace BlogYes.Infrastructure.Migrations
 
                             b1.ToTable("Tag");
 
-                            b1.WithOwner()
+                            b1.WithOwner("Blog")
                                 .HasForeignKey("BlogId");
+
+                            b1.Navigation("Blog");
                         });
 
                     b.Navigation("Category");
@@ -282,6 +368,39 @@ namespace BlogYes.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("BlogYes.Domain.Entities.Role", b =>
+                {
+                    b.OwnsMany("BlogYes.Domain.ValueObjects.UserValue.Scope", "Scopes", b1 =>
+                        {
+                            b1.Property<Guid>("RoleId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("integer");
+
+                            NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b1.Property<int>("Id"));
+
+                            b1.Property<string>("Description")
+                                .HasColumnType("text");
+
+                            b1.Property<string>("Name")
+                                .IsRequired()
+                                .HasColumnType("text");
+
+                            b1.HasKey("RoleId", "Id");
+
+                            b1.ToTable("Scope");
+
+                            b1.WithOwner("Role")
+                                .HasForeignKey("RoleId");
+
+                            b1.Navigation("Role");
+                        });
+
+                    b.Navigation("Scopes");
+                });
+
             modelBuilder.Entity("BlogYes.Domain.Entities.User", b =>
                 {
                     b.HasOne("BlogYes.Domain.Entities.Role", "Role")
@@ -290,7 +409,7 @@ namespace BlogYes.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsOne("BlogYes.Domain.ValueObjects.User.Detail", "Detail", b1 =>
+                    b.OwnsOne("BlogYes.Domain.ValueObjects.UserValue.Detail", "Detail", b1 =>
                         {
                             b1.Property<Guid>("UserId")
                                 .HasColumnType("uuid");
@@ -303,13 +422,15 @@ namespace BlogYes.Infrastructure.Migrations
 
                             b1.HasKey("UserId");
 
-                            b1.ToTable("User");
+                            b1.ToTable("Users");
 
-                            b1.WithOwner()
+                            b1.WithOwner("User")
                                 .HasForeignKey("UserId");
+
+                            b1.Navigation("User");
                         });
 
-                    b.OwnsOne("BlogYes.Domain.ValueObjects.User.Setting", "Settings", b1 =>
+                    b.OwnsOne("BlogYes.Domain.ValueObjects.UserValue.Setting", "Settings", b1 =>
                         {
                             b1.Property<Guid>("UserId")
                                 .HasColumnType("uuid");
@@ -320,10 +441,12 @@ namespace BlogYes.Infrastructure.Migrations
 
                             b1.HasKey("UserId");
 
-                            b1.ToTable("User");
+                            b1.ToTable("Users");
 
-                            b1.WithOwner()
+                            b1.WithOwner("User")
                                 .HasForeignKey("UserId");
+
+                            b1.Navigation("User");
                         });
 
                     b.Navigation("Detail");

@@ -73,7 +73,7 @@ namespace BlogYes.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Blog");
+                    b.ToTable("Blogs");
                 });
 
             modelBuilder.Entity("BlogYes.Domain.Entities.Category", b =>
@@ -107,7 +107,7 @@ namespace BlogYes.Infrastructure.Migrations
 
                     b.HasIndex("SoftDeleted");
 
-                    b.ToTable("Category");
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("BlogYes.Domain.Entities.Comment", b =>
@@ -153,7 +153,7 @@ namespace BlogYes.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Comment");
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("BlogYes.Domain.Entities.Role", b =>
@@ -183,7 +183,51 @@ namespace BlogYes.Infrastructure.Migrations
 
                     b.HasIndex("SoftDeleted");
 
-                    b.ToTable("Role");
+                    b.ToTable("Roles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("e8df3280-8ab1-4b45-8d6a-6c3e669317ac"),
+                            Description = "developer with all cathable resources even it was obselete",
+                            Name = "developer",
+                            SoftDeleted = false
+                        },
+                        new
+                        {
+                            Id = new Guid("4fe6ebb8-5001-40b4-a59e-d193ad9186f8"),
+                            Description = "super user with all catchable resources",
+                            Name = "super",
+                            SoftDeleted = false
+                        },
+                        new
+                        {
+                            Id = new Guid("e1f23f37-919c-453b-aff1-1214415e54b8"),
+                            Description = "admin to manage all resourcs",
+                            Name = "admin",
+                            SoftDeleted = false
+                        },
+                        new
+                        {
+                            Id = new Guid("cbc91154-913e-40ba-aa9b-4ebb551bac99"),
+                            Description = "import user with some special resources",
+                            Name = "vip",
+                            SoftDeleted = false
+                        },
+                        new
+                        {
+                            Id = new Guid("4a15f57a-0cb7-4cc9-95c0-91ba672a341c"),
+                            Description = "normal user with some basic resources",
+                            Name = "member",
+                            SoftDeleted = false
+                        },
+                        new
+                        {
+                            Id = new Guid("ffce17eb-a74c-4b44-aaac-2e2e78e04f9e"),
+                            Description = "a visitor with some read resources",
+                            Name = "visitor",
+                            SoftDeleted = false
+                        });
                 });
 
             modelBuilder.Entity("BlogYes.Domain.Entities.User", b =>
@@ -235,7 +279,21 @@ namespace BlogYes.Infrastructure.Migrations
                     b.HasIndex("Username")
                         .IsUnique();
 
-                    b.ToTable("User");
+                    b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("cb29ce61-7255-47d5-b2e6-2eb3434b60cb"),
+                            DisplayName = "developer",
+                            Email = "unknow",
+                            Password = "dev@1234",
+                            RegisterTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            RoleId = new Guid("e8df3280-8ab1-4b45-8d6a-6c3e669317ac"),
+                            SoftDeleted = false,
+                            TelephoneNumber = "unknow",
+                            Username = "dev"
+                        });
                 });
 
             modelBuilder.Entity("BlogYes.Domain.Entities.Blog", b =>
@@ -361,7 +419,7 @@ namespace BlogYes.Infrastructure.Migrations
 
                             b1.HasKey("UserId");
 
-                            b1.ToTable("User");
+                            b1.ToTable("Users");
 
                             b1.WithOwner("User")
                                 .HasForeignKey("UserId");
@@ -380,7 +438,7 @@ namespace BlogYes.Infrastructure.Migrations
 
                             b1.HasKey("UserId");
 
-                            b1.ToTable("User");
+                            b1.ToTable("Users");
 
                             b1.WithOwner("User")
                                 .HasForeignKey("UserId");

@@ -7,9 +7,9 @@ namespace BlogYes.Application.Utilities
 {
     public static class EncryptUtil
     {
-        private static string _privatePem = string.Empty;
-        private static string _publicPem = string.Empty;
-        public static ECDsa ECDsa { get; private set; } = ECDsa.Create();
+
+        public static ECDsa pubECDsa = ECDsa.Create();
+        public static ECDsa privECDsa = ECDsa.Create();
 
         public static void Initialize(string keyFolder)
         {
@@ -18,31 +18,33 @@ namespace BlogYes.Application.Utilities
 
             if (!File.Exists(privateKeyPath) || !File.Exists(publicKeyPath))
             {
-                ECDsa.GenerateKey(ECCurve.NamedCurves.nistP256);
-                _privatePem = ECDsa.ExportECPrivateKeyPem();
-                _publicPem = ECDsa.ExportSubjectPublicKeyInfoPem();
-                File.WriteAllText(privateKeyPath, _privatePem);
-                File.WriteAllText(publicKeyPath, _publicPem);
+                var ecdsa = ECDsa.Create();
+                ecdsa.GenerateKey(ECCurve.NamedCurves.nistP256);
+                var privatePem = ecdsa.ExportECPrivateKeyPem();
+                var publicPem = ecdsa.ExportSubjectPublicKeyInfoPem();
+                File.WriteAllText(privateKeyPath, privatePem);
+                File.WriteAllText(publicKeyPath, publicPem);
             }
             else
             {
-                _privatePem = File.ReadAllText(privateKeyPath);
-                _publicPem = File.ReadAllText(publicKeyPath);
-                ECDsa.ImportFromPem(_publicPem);
-                ECDsa.ImportFromPem(_privatePem);
+                var privatePem = File.ReadAllText(privateKeyPath);
+                var publicPem = File.ReadAllText(publicKeyPath);
+                privECDsa.ImportFromPem(privatePem);
+                pubECDsa.ImportFromPem(publicPem);
             }
         }
+            
 
         public static string GenerateJwtToken(JwtPayload pairs)
         {
-            var credentials = new SigningCredentials(new ECDsaSecurityKey(ECDsa), SecurityAlgorithms.EcdsaSha256);
+            var credentials = new SigningCredentials(new ECDsaSecurityKey(privECDsa), SecurityAlgorithms.EcdsaSha256);
             var token = new JwtSecurityToken(new JwtHeader(credentials), pairs);
             return token.ToString();
         }
 
         public static string GenerateJwtToken(string issuer, string audience, TimeSpan expires, params Claim[] claims)
         {
-            var credentials = new SigningCredentials(new ECDsaSecurityKey(ECDsa), SecurityAlgorithms.EcdsaSha256);
+            var credentials = new SigningCredentials(new ECDsaSecurityKey(privECDsa), SecurityAlgorithms.EcdsaSha256);
             var nbf = DateTime.UtcNow;
             var expire = nbf + expires;
             var token = new JwtSecurityToken(issuer, audience,

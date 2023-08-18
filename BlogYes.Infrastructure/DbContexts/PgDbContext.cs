@@ -12,11 +12,11 @@ namespace BlogYes.Infrastructure.DbContexts
 
         #region dbsets
 
-        public DbSet<User> User { get; set; }
-        public DbSet<Role> Role { get; set; }
-        public DbSet<Blog> Blog { get; set; }
-        public DbSet<Comment> Comment { get; set; }
-        public DbSet<Category> Category { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Role> Roles { get; set; }
+        public DbSet<Blog> Blogs { get; set; }
+        public DbSet<Comment> Comments { get; set; }
+        public DbSet<Category> Categories { get; set; }
 
         #endregion dbsets
 
@@ -48,10 +48,35 @@ namespace BlogYes.Infrastructure.DbContexts
 
             #endregion soft delete filter
 
-            #region entities relationship
+            #region entities initialize
+
+            #region role
+
+            modelBuilder.Entity<Role>()
+                .HasData(Role.Seeds);
+
+            modelBuilder.Entity<Role>()
+                .HasIndex(u => u.SoftDeleted);
+
+            modelBuilder.Entity<Role>()
+                .HasIndex(r => r.Name)
+                .IsUnique();
+
+            modelBuilder.Entity<Role>()
+                .OwnsMany(r => r.Scopes)
+                .WithOwner(sc => sc.Role);
+
+            modelBuilder.Entity<Role>()
+                .HasMany(u => u.Users)
+                .WithOne(b => b.Role)
+                .HasForeignKey(b => b.RoleId);
+
+            #endregion role
 
             #region user
 
+            modelBuilder.Entity<User>()
+                .HasData(User.Seeds);
             modelBuilder.Entity<User>()
                 .HasIndex(u => u.Username)
                 .IsUnique();
@@ -74,26 +99,6 @@ namespace BlogYes.Infrastructure.DbContexts
                 .HasForeignKey(b => b.UserId);
 
             #endregion user
-
-            #region role
-
-            modelBuilder.Entity<Role>()
-                .HasIndex(u => u.SoftDeleted);
-
-            modelBuilder.Entity<Role>()
-                .HasIndex(r => r.Name)
-                .IsUnique();
-
-            modelBuilder.Entity<Role>()
-                .OwnsMany(r => r.Scopes)
-                .WithOwner(sc => sc.Role);
-
-            modelBuilder.Entity<Role>()
-                .HasMany(u => u.Users)
-                .WithOne(b => b.Role)
-                .HasForeignKey(b => b.RoleId);
-
-            #endregion role
 
             #region blog
 

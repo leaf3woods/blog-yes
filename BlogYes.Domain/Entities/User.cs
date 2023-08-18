@@ -29,5 +29,21 @@ namespace BlogYes.Domain.Entities
         public DateTime? DeleteTime { get; set; } = null;
 
         #endregion delete filter
+
+        public readonly static User DevUser = new()
+        {
+            Username = "dev",
+            Password = "dev@1234",
+            DisplayName = "developer",
+            Email = "unknow",
+            TelephoneNumber = "unknow",
+            RegisterTime = DateTime.UnixEpoch,
+            RoleId = Role.DevRole.Id,
+        };
+
+        public static User[] Seeds { get; } = new User[]
+        {
+            DevUser
+        };
     }
 }

@@ -14,16 +14,5 @@ namespace BlogYes.Domain.ValueObjects.UserValue
         #endregion navigation
 
         public static Scope FromString(string scopeName) => new Scope { Name = scopeName };
-
-        public static Scope[] InitItems => new Scope[]
-        {
-            new Scope { Name = "default", Description = "default" },
-        };
-    }
-
-    public enum ScopeType
-    {
-        Activated,
-        Supported
     }
 }

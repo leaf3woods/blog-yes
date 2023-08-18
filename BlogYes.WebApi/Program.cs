@@ -7,7 +7,9 @@ using BlogYes.Infrastructure.DbContexts;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Npgsql;
+using Serilog;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,6 +29,11 @@ builder.Host.ConfigureContainer<ContainerBuilder>(config =>
 
 // Add services to the container.
 builder.Services.AddLogging();
+builder.Host.UseSerilog((context, logger) =>
+{
+    logger.ReadFrom.Configuration(context.Configuration);
+    logger.Enrich.FromLogContext();
+});
 
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
 builder.Services.AddControllers().AddJsonOptions(config =>
@@ -37,6 +44,7 @@ builder.Services.AddControllers().AddJsonOptions(config =>
 
 builder.Services.AddAuthentication(options =>
 {
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 }).AddJwtBearer(option =>
@@ -44,7 +52,7 @@ builder.Services.AddAuthentication(options =>
     option.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new ECDsaSecurityKey(EncryptUtil.ECDsa),    // Use ECDsa
+        IssuerSigningKey = new ECDsaSecurityKey(EncryptUtil.pubECDsa),    // Use ECDsa
         ValidAlgorithms = new[] { SecurityAlgorithms.EcdsaSha256 },
         ValidateIssuer = true,
         ValidIssuer = SettingUtil.Jwt.Issuer,
@@ -62,7 +70,48 @@ builder.Services.AddAuthorization(options =>
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(option =>
+{
+    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    option.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+    option.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Description = "apis for bog yes system",
+        Title = "blog yes!",
+        Contact = new OpenApiContact
+        {
+            Name = "yes",
+            Email = "en-yes@outlook.com",
+            Url = new Uri("https://github.com/leaf3woods")
+        }
+    });
+    option.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.Http,
+        Description = "",
+        Name = "Authentication",
+        Scheme = JwtBearerDefaults.AuthenticationScheme,
+        
+    });
+    option.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                In = ParameterLocation.Header,
+                Type = SecuritySchemeType.Http,
+                Scheme = JwtBearerDefaults.AuthenticationScheme,
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = JwtBearerDefaults.AuthenticationScheme
+                }
+            },
+            new string[]{ }
+        },
+    });
+});
 
 // Add dbContext pool
 builder.Services.AddPooledDbContextFactory<PgDbContext>(options => options.UseNpgsql(

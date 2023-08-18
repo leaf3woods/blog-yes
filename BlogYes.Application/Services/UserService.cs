@@ -38,8 +38,7 @@ namespace BlogYes.Application.Services
             }
             var scopeNames = user.Role.Scopes.Select(x => x.Name);
             var token = EncryptUtil.GenerateJwtToken(SettingUtil.Jwt.Issuer, SettingUtil.Jwt.Audience, SettingUtil.Jwt.ExpireMin,
-                new Claim(CustomClaimsType.UserId, user.Id.ToString()), new Claim(CustomClaimsType.Role, user.Role.Name),
-                new Claim(CustomClaimsType.Scopes, string.Join(',', scopeNames))) ??
+                new Claim(CustomClaimsType.UserId, user.Id.ToString()), new Claim(CustomClaimsType.Role, user.Role.Name)) ??
                 throw new Exception("generate jwt token error");
             return token;
         }
