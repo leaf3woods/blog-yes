@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using BlogYes.Infrastructure.DbContexts;
 using Microsoft.Extensions.Logging;
 
 namespace BlogYes.Application.Utilities.InjectionModules
@@ -9,6 +10,8 @@ namespace BlogYes.Application.Utilities.InjectionModules
         {
             builder.Register(_ => new LoggerFactory().CreateLogger("Adapter"))
                 .AsImplementedInterfaces()
+                .SingleInstance();
+            builder.RegisterType<InitialDatabase>()
                 .SingleInstance();
         }
     }

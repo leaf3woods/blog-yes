@@ -3,6 +3,7 @@ using BlogYes.Application.Dtos;
 using BlogYes.Application.Services.Base;
 using BlogYes.Domain.Entities;
 using BlogYes.Domain.Repositories;
+using BlogYes.Domain.Utilities;
 using Microsoft.EntityFrameworkCore;
 
 namespace BlogYes.Application.Services
@@ -22,7 +23,7 @@ namespace BlogYes.Application.Services
         [Scope("create a role", ManagedResource.Role, ManagedAction.Create, ManagedItem.Dto)]
         public async Task<RoleReadDto?> CreateRoleAsync(RoleCreateDto roleDto)
         {
-            if (RequireScopeUtil.TryFillAll(roleDto.ScopeNames, out var fullScopes))
+            if (!RequireScopeUtil.TryFillAll(roleDto.ScopeNames, out var fullScopes))
             {
                 throw new Exception("unsupported scope find");
             }
@@ -44,7 +45,7 @@ namespace BlogYes.Application.Services
         [Scope("get all roles", ManagedResource.Role, ManagedAction.Read, ManagedItem.All)]
         public async Task<IEnumerable<RoleReadDto>> GetRolesAsync()
         {
-            var roles = await _roleRepository.GetQueryWhere().ToArrayAsync();
+            var roles = await _roleRepository.GetQueryWhere().Include(r => r.Scopes).ToArrayAsync();
             var dtos = Mapper.Map<IEnumerable<RoleReadDto>>(roles);
             return dtos;
         }
@@ -52,7 +53,7 @@ namespace BlogYes.Application.Services
         [Scope("change role manage scope", ManagedResource.Role, ManagedAction.Update, "Scopes")]
         public async Task<int> ModifyRoleScopeAsync(Guid roleId, List<string> scopes)
         {
-            if (RequireScopeUtil.TryFillAll(scopes, out var fullScopes))
+            if (!RequireScopeUtil.TryFillAll(scopes, out var fullScopes))
             {
                 throw new Exception("unsupported scope find");
             }

@@ -17,6 +17,7 @@ namespace BlogYes.Infrastructure.DbContexts
         public DbSet<Blog> Blogs { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Scope> Scopes { get; set; }
 
         #endregion dbsets
 
@@ -63,8 +64,9 @@ namespace BlogYes.Infrastructure.DbContexts
                 .IsUnique();
 
             modelBuilder.Entity<Role>()
-                .OwnsMany(r => r.Scopes)
-                .WithOwner(sc => sc.Role);
+                .HasMany(r => r.Scopes)
+                .WithOne(s => s.Role)
+                .HasForeignKey(s => s.RoleId);
 
             modelBuilder.Entity<Role>()
                 .HasMany(u => u.Users)
@@ -72,6 +74,13 @@ namespace BlogYes.Infrastructure.DbContexts
                 .HasForeignKey(b => b.RoleId);
 
             #endregion role
+
+            #region scope
+
+            modelBuilder.Entity<Scope>()
+                .HasData(Scope.Seeds);
+
+            #endregion
 
             #region user
 

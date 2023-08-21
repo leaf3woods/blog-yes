@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BlogYes.Infrastructure.Migrations
 {
     [DbContext(typeof(PgDbContext))]
-    [Migration("20230818140716_Initialize")]
+    [Migration("20230821090117_Initialize")]
     partial class Initialize
     {
         /// <inheritdoc />
@@ -206,7 +206,7 @@ namespace BlogYes.Infrastructure.Migrations
                         new
                         {
                             Id = new Guid("e1f23f37-919c-453b-aff1-1214415e54b8"),
-                            Description = "admin to manage all resourcs",
+                            Description = "admin to manage user resourcs",
                             Name = "admin",
                             SoftDeleted = false
                         },
@@ -230,6 +230,54 @@ namespace BlogYes.Infrastructure.Migrations
                             Description = "a visitor with some read resources",
                             Name = "visitor",
                             SoftDeleted = false
+                        });
+                });
+
+            modelBuilder.Entity("BlogYes.Domain.Entities.Scope", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("Scopes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            Description = "manage all user resources",
+                            Name = "User",
+                            RoleId = new Guid("e1f23f37-919c-453b-aff1-1214415e54b8")
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            Description = "manage all user resources",
+                            Name = "User",
+                            RoleId = new Guid("4fe6ebb8-5001-40b4-a59e-d193ad9186f8")
+                        },
+                        new
+                        {
+                            Id = 3L,
+                            Description = "manage all role resources",
+                            Name = "Role",
+                            RoleId = new Guid("4fe6ebb8-5001-40b4-a59e-d193ad9186f8")
                         });
                 });
 
@@ -289,7 +337,7 @@ namespace BlogYes.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("956f383d-1ef3-43b0-b7e0-ac31fc123e46"),
+                            Id = new Guid("49450bf9-e270-4293-8bca-0fb0c11db70e"),
                             DisplayName = "developer",
                             Email = "unknow",
                             Passphrase = "Uh+8E9ft9jptdMzAVRKo0UYQtqn5epsbJUZQGbL/Xhk=",
@@ -371,37 +419,15 @@ namespace BlogYes.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("BlogYes.Domain.Entities.Role", b =>
+            modelBuilder.Entity("BlogYes.Domain.Entities.Scope", b =>
                 {
-                    b.OwnsMany("BlogYes.Domain.ValueObjects.UserValue.Scope", "Scopes", b1 =>
-                        {
-                            b1.Property<Guid>("RoleId")
-                                .HasColumnType("uuid");
+                    b.HasOne("BlogYes.Domain.Entities.Role", "Role")
+                        .WithMany("Scopes")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                            b1.Property<int>("Id")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("integer");
-
-                            NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b1.Property<int>("Id"));
-
-                            b1.Property<string>("Description")
-                                .HasColumnType("text");
-
-                            b1.Property<string>("Name")
-                                .IsRequired()
-                                .HasColumnType("text");
-
-                            b1.HasKey("RoleId", "Id");
-
-                            b1.ToTable("Scope");
-
-                            b1.WithOwner("Role")
-                                .HasForeignKey("RoleId");
-
-                            b1.Navigation("Role");
-                        });
-
-                    b.Navigation("Scopes");
+                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("BlogYes.Domain.Entities.User", b =>
@@ -471,6 +497,8 @@ namespace BlogYes.Infrastructure.Migrations
 
             modelBuilder.Entity("BlogYes.Domain.Entities.Role", b =>
                 {
+                    b.Navigation("Scopes");
+
                     b.Navigation("Users");
                 });
 

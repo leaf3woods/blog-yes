@@ -43,6 +43,18 @@ namespace BlogYes.Domain.Entities
             RoleId = Role.DevRole.Id,
         };
 
+        public readonly static User SuperUser = new()
+        {
+            Username = "super",
+            Passphrase = "Uh+8E9ft9jptdMzAVRKo0UYQtqn5epsbJUZQGbL/Xhk=",
+            Salt = "5+fPPv0FShtKo3ed746TiuNojEZsxuPkhbU+YvF5DuQ=",
+            DisplayName = "super",
+            Email = "unknow",
+            TelephoneNumber = "unknow",
+            RegisterTime = DateTime.UnixEpoch,
+            RoleId = Role.SuperRole.Id,
+        };
+
         public static User[] Seeds { get; } = new User[]
         {
             DevUser

@@ -1,4 +1,4 @@
-﻿namespace BlogYes.Application.Auth
+﻿namespace BlogYes.Domain.Utilities
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Method)]
     public class ScopeAttribute : Attribute

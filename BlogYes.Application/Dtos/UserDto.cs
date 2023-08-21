@@ -10,7 +10,6 @@ namespace BlogYes.Application.Dtos
         public string DisplayName { get; set; } = null!;
         public string Email { get; set; } = null!;
         public string TelephoneNumber { get; set; } = null!;
-        public Guid RoleId { get; set; }
         public DateTime RegisterTime { get; set; }
     }
 

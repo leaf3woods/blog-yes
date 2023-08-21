@@ -1,5 +1,6 @@
-﻿using BlogYes.Domain.Entities.Base;
-using BlogYes.Domain.ValueObjects.UserValue;
+﻿using BlogYes.Application.Auth;
+using BlogYes.Domain.Entities.Base;
+using BlogYes.Domain.Utilities;
 
 namespace BlogYes.Domain.Entities
 {
@@ -10,7 +11,7 @@ namespace BlogYes.Domain.Entities
 
         #region navigation
 
-        public ICollection<Scope> Scopes { get; set; } = null!;
+        public virtual ICollection<Scope>? Scopes { get; set; }
         public virtual ICollection<User>? Users { get; set; }
 
         #endregion navigation
@@ -35,14 +36,14 @@ namespace BlogYes.Domain.Entities
         {
             Id = new Guid("4fe6ebb8-5001-40b4-a59e-d193ad9186f8"),
             Name = "super",
-            Description = "super user with all catchable resources",
+            Description = "super user with all catchable resources"
         };
 
         public readonly static Role AdminRole = new()
         {
             Id = new Guid("e1f23f37-919c-453b-aff1-1214415e54b8"),
             Name = "admin",
-            Description = "admin to manage all resourcs",
+            Description = "admin to manage user resourcs"
         };
 
         public readonly static Role VipRole = new()

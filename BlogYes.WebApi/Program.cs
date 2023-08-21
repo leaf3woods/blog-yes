@@ -3,6 +3,7 @@ using Autofac.Extensions.DependencyInjection;
 using BlogYes.Application.Auth;
 using BlogYes.Application.Utilities;
 using BlogYes.Core.Utilities;
+using BlogYes.Domain.Utilities;
 using BlogYes.Infrastructure.DbContexts;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -139,5 +140,8 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+var initDb = app.Services.GetService<InitialDatabase>();
+await initDb?.Initialize()!;
 
 app.Run();

@@ -47,20 +47,20 @@ namespace BlogYes.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Scope",
+                name: "Scopes",
                 columns: table => new
                 {
-                    RoleId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Id = table.Column<int>(type: "integer", nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "text", nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: true)
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    RoleId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Scope", x => new { x.RoleId, x.Id });
+                    table.PrimaryKey("PK_Scopes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Scope_Roles_RoleId",
+                        name: "FK_Scopes_Roles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "Roles",
                         principalColumn: "Id",
@@ -191,15 +191,25 @@ namespace BlogYes.Infrastructure.Migrations
                     { new Guid("4a15f57a-0cb7-4cc9-95c0-91ba672a341c"), null, "normal user with some basic resources", "member", false },
                     { new Guid("4fe6ebb8-5001-40b4-a59e-d193ad9186f8"), null, "super user with all catchable resources", "super", false },
                     { new Guid("cbc91154-913e-40ba-aa9b-4ebb551bac99"), null, "import user with some special resources", "vip", false },
-                    { new Guid("e1f23f37-919c-453b-aff1-1214415e54b8"), null, "admin to manage all resourcs", "admin", false },
+                    { new Guid("e1f23f37-919c-453b-aff1-1214415e54b8"), null, "admin to manage user resourcs", "admin", false },
                     { new Guid("e8df3280-8ab1-4b45-8d6a-6c3e669317ac"), null, "developer with all cathable resources even it was obselete", "developer", false },
                     { new Guid("ffce17eb-a74c-4b44-aaac-2e2e78e04f9e"), null, "a visitor with some read resources", "visitor", false }
                 });
 
             migrationBuilder.InsertData(
+                table: "Scopes",
+                columns: new[] { "Id", "Description", "Name", "RoleId" },
+                values: new object[,]
+                {
+                    { 1L, "manage all user resources", "User", new Guid("e1f23f37-919c-453b-aff1-1214415e54b8") },
+                    { 2L, "manage all user resources", "User", new Guid("4fe6ebb8-5001-40b4-a59e-d193ad9186f8") },
+                    { 3L, "manage all role resources", "Role", new Guid("4fe6ebb8-5001-40b4-a59e-d193ad9186f8") }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "DeleteTime", "DisplayName", "Email", "Passphrase", "RegisterTime", "RoleId", "Salt", "SoftDeleted", "TelephoneNumber", "Username" },
-                values: new object[] { new Guid("956f383d-1ef3-43b0-b7e0-ac31fc123e46"), null, "developer", "unknow", "Uh+8E9ft9jptdMzAVRKo0UYQtqn5epsbJUZQGbL/Xhk=", new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new Guid("e8df3280-8ab1-4b45-8d6a-6c3e669317ac"), "5+fPPv0FShtKo3ed746TiuNojEZsxuPkhbU+YvF5DuQ=", false, "unknow", "dev" });
+                values: new object[] { new Guid("49450bf9-e270-4293-8bca-0fb0c11db70e"), null, "developer", "unknow", "Uh+8E9ft9jptdMzAVRKo0UYQtqn5epsbJUZQGbL/Xhk=", new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new Guid("e8df3280-8ab1-4b45-8d6a-6c3e669317ac"), "5+fPPv0FShtKo3ed746TiuNojEZsxuPkhbU+YvF5DuQ=", false, "unknow", "dev" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Blogs_CategoryId",
@@ -271,6 +281,11 @@ namespace BlogYes.Infrastructure.Migrations
                 column: "SoftDeleted");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Scopes_RoleId",
+                table: "Scopes",
+                column: "RoleId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Users_RoleId",
                 table: "Users",
                 column: "RoleId");
@@ -294,7 +309,7 @@ namespace BlogYes.Infrastructure.Migrations
                 name: "Comments");
 
             migrationBuilder.DropTable(
-                name: "Scope");
+                name: "Scopes");
 
             migrationBuilder.DropTable(
                 name: "Tag");

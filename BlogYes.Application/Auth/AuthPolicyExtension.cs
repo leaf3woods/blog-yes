@@ -1,5 +1,5 @@
 ﻿using BlogYes.Application.Auth.Requirements;
-using BlogYes.Domain.ValueObjects.UserValue;
+using BlogYes.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 
 namespace BlogYes.Application.Auth

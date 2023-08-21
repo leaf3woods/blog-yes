@@ -1,9 +1,7 @@
-﻿using Autofac;
-using BlogYes.Application.Services.Base;
-using BlogYes.Domain.ValueObjects.UserValue;
+﻿using BlogYes.Domain.Entities;
 using System.Reflection;
 
-namespace BlogYes.Application.Auth
+namespace BlogYes.Domain.Utilities
 {
     public static class RequireScopeUtil
     {
@@ -11,8 +9,8 @@ namespace BlogYes.Application.Auth
 
         public static void Initialize()
         {
-            Scopes = Assembly.GetExecutingAssembly().GetTypes()
-                .Where(type => type.BaseType == typeof(BaseService))
+            Scopes = Assembly.Load("BlogYes." + nameof(Application)).GetTypes()
+                .Where(type => type.Namespace == "BlogYes." + nameof(Application) + ".Services")
                 .SelectMany(rqt => rqt.GetMethods().Select(m => m.GetCustomAttribute<ScopeAttribute>()).Append(rqt.GetCustomAttribute<ScopeAttribute>()))
                 .Select(attribute =>
                 {
@@ -28,7 +26,7 @@ namespace BlogYes.Application.Auth
 
         public static bool IsExist(string scopeName) => Scopes.Any(s => s.Name == scopeName);
 
-        public static Scope? Fill(string scopeName) => Scopes.FirstOrDefault(s => s.Name == scopeName);
+        public static Scope Fill(string scopeName) => Scopes.First(s => s.Name == scopeName);
 
         public static IEnumerable<Scope> FillAll(IEnumerable<string> scopeNames)
         {

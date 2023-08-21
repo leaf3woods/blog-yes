@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using BlogYes.Application.Dtos;
 using BlogYes.Domain.Entities;
-using BlogYes.Domain.ValueObjects.UserValue;
 
 namespace BlogYes.Application.Utilities.MapperProfiles.DtoProfiles
 {
