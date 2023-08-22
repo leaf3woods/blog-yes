@@ -16,6 +16,7 @@ namespace BlogYes.Infrastructure.DbContexts
         {
             var context =  await _dbContextFactory.CreateDbContextAsync();
             context.Database.EnsureCreated();
+            await context.Database.MigrateAsync();
             foreach (var seed in Scope.Seeds)
             {
                 var entity =  await context.Scopes.FirstOrDefaultAsync(sc => sc.Id == seed.Id);

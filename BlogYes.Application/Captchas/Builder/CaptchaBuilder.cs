@@ -3,25 +3,18 @@
     public abstract class CaptchaBuilder
     {
         protected bool GenLines { get; set; } = false;
-        protected int Nosie { get; set; } = 0;
-        protected CapchaGenOptions? CapchaGenOptions { get; set; }
+        protected bool Nosie { get; set; } = false;
+        protected CaptchaGenOptions? CaptchaGenOptions { get; set; }
 
-        public abstract CaptchaBuilder WithNoise(int count);
+        public abstract CaptchaBuilder WithNoise();
 
         public abstract CaptchaBuilder WithLines();
 
-        public abstract CaptchaBuilder WithGenOption(CapchaGenOptions options);
+        public abstract CaptchaBuilder WithGenOption(CaptchaGenOptions options);
 
-        public static CaptchaBuilder CreateType(CaptchaType type)
+        public static TBuilder Create<TBuilder>() where TBuilder : CaptchaBuilder, new()
         {
-            CaptchaBuilder builder = type switch
-            {
-                CaptchaType.Question => new QuestionCaptchaBuilder(),
-                CaptchaType.Han => new HanCaptchaBuilder(),
-                CaptchaType.Character => new CharacterCaptchaBuilder(),
-                _ => throw new ArgumentException("unknow captcha type")
-            };
-            return builder;
+            return new TBuilder();
         }
 
         public abstract Captcha Build();

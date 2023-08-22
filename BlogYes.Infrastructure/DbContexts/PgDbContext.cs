@@ -66,6 +66,7 @@ namespace BlogYes.Infrastructure.DbContexts
             modelBuilder.Entity<Role>()
                 .HasMany(r => r.Scopes)
                 .WithOne(s => s.Role)
+                .IsRequired(false)
                 .HasForeignKey(s => s.RoleId);
 
             modelBuilder.Entity<Role>()

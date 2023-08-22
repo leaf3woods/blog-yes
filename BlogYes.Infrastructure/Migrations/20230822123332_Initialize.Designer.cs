@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BlogYes.Infrastructure.Migrations
 {
     [DbContext(typeof(PgDbContext))]
-    [Migration("20230821090117_Initialize")]
+    [Migration("20230822123332_Initialize")]
     partial class Initialize
     {
         /// <inheritdoc />
@@ -181,10 +181,10 @@ namespace BlogYes.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Name")
-                        .IsUnique();
-
                     b.HasIndex("SoftDeleted");
+
+                    b.HasIndex("Name", "SoftDeleted")
+                        .IsUnique();
 
                     b.ToTable("Roles");
 
@@ -329,7 +329,7 @@ namespace BlogYes.Infrastructure.Migrations
 
                     b.HasIndex("SoftDeleted");
 
-                    b.HasIndex("Username")
+                    b.HasIndex("Username", "SoftDeleted")
                         .IsUnique();
 
                     b.ToTable("Users");
@@ -337,7 +337,7 @@ namespace BlogYes.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("49450bf9-e270-4293-8bca-0fb0c11db70e"),
+                            Id = new Guid("b6770d16-0ff0-436d-a4fd-ea18df643eae"),
                             DisplayName = "developer",
                             Email = "unknow",
                             Passphrase = "Uh+8E9ft9jptdMzAVRKo0UYQtqn5epsbJUZQGbL/Xhk=",
@@ -423,9 +423,7 @@ namespace BlogYes.Infrastructure.Migrations
                 {
                     b.HasOne("BlogYes.Domain.Entities.Role", "Role")
                         .WithMany("Scopes")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("RoleId");
 
                     b.Navigation("Role");
                 });

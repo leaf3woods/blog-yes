@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BlogYes.Application.Captchas;
+using BlogYes.Application.Dtos;
+using BlogYes.Application.Services.Base;
+using Microsoft.AspNetCore.Mvc;
 
 namespace BlogYes.WebApi.Controllers
 {
@@ -9,5 +12,18 @@ namespace BlogYes.WebApi.Controllers
     [ApiController]
     public class HomeController : ControllerBase
     {
+        public HomeController(
+                IUserService userService
+            )
+        {
+            _userService = userService;
+        }
+        private IUserService _userService;
+
+        [HttpGet]
+        [Route("captcha")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public ActionResult<CaptchaReadDto> GetCaptcha() => _userService.GenerateCaptcha();
     }
 }

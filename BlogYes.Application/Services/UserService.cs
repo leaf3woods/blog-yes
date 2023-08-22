@@ -84,17 +84,19 @@ namespace BlogYes.Application.Services
             return count == 0 ? null : Mapper.Map<UserReadDto>(user);
         }
 
-        public Captcha GetCaptcha()
+        public CaptchaReadDto GenerateCaptcha()
         {
-            var captcha = CaptchaBuilder.CreateType(CaptchaType.Character)
-                .WithGenOption(new CapchaGenOptions
-                {
-                    FontFamily = "",
-                    FontSize = 10,
-                    Height = 200,
-                    Width = 50,
-                }).WithNoise(2).WithLines().Build();
-            return captcha;
+            //var builder = CaptchaBuilder.Create<CharacterCaptchaBuilder>()
+            //    .WithLowerCase()
+            //    .WithUpperCase();
+            var builder = CaptchaBuilder.Create<QuestionCaptchaBuilder>();
+            var captcha = builder.WithGenOption(new CaptchaGenOptions
+            {
+                FontFamily = "consolas",
+                Height = 80,
+                Width = 200,
+            }).WithNoise().WithLines().Build();
+            return Mapper.Map<CaptchaReadDto>(captcha);
         }
     }
 }

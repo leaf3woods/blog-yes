@@ -141,7 +141,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-var initDb = app.Services.GetService<InitialDatabase>();
-await initDb?.Initialize()!;
+(app.Services.GetService<InitialDatabase>())?.Initialize();
 
 app.Run();

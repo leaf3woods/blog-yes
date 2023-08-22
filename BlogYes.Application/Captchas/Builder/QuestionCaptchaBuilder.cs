@@ -5,18 +5,20 @@ namespace BlogYes.Application.Captchas.Builder
     {
         public override Captcha Build()
         {
-            if (CapchaGenOptions is null) throw new ArgumentNullException("CapchaGenOptions was not set");
+            if (CaptchaGenOptions is null) throw new ArgumentNullException("CapchaGenOptions was not set");
+            var equation = CaptchaUtil.GenEquation(out var tuple);
             var captcha = new Captcha()
             {
                 Type = CaptchaType.Question,
-                Pixel = new (CapchaGenOptions.Width, CapchaGenOptions.Height)
+                Image = CaptchaUtil.GenerateImage(CaptchaGenOptions, equation, Nosie, GenLines),
+                Pixel = new (CaptchaGenOptions.Width, CaptchaGenOptions.Height)
             };
             return captcha;
         }
 
-        public override CaptchaBuilder WithGenOption(CapchaGenOptions options)
+        public override CaptchaBuilder WithGenOption(CaptchaGenOptions options)
         {
-            CapchaGenOptions = options;
+            CaptchaGenOptions = options;
             return this;
         }
 
@@ -26,9 +28,9 @@ namespace BlogYes.Application.Captchas.Builder
             return this;
         }
 
-        public override CaptchaBuilder WithNoise(int count)
+        public override CaptchaBuilder WithNoise()
         {
-            Nosie = count;
+            Nosie = true;
             return this;
         }
     }

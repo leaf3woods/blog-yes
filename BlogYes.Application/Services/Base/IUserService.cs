@@ -17,7 +17,7 @@ namespace BlogYes.Application.Services.Base
 
         public Task<UserReadDto?> ChangeRole(Guid userId, Guid roleId);
 
-        public Captcha GetCaptcha();
+        public CaptchaReadDto GenerateCaptcha();
 
     }
 }

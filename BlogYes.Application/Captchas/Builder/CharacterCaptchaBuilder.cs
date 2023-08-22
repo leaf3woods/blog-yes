@@ -3,23 +3,24 @@ namespace BlogYes.Application.Captchas.Builder
 {
     public class CharacterCaptchaBuilder : CaptchaBuilder
     {
+        private IEnumerable<int> chars = CaptchaUtil.NumChars;
         public int Length { get; private set; } = 4;
-        public bool Lowercase { get; private set; } = false;
+
         public override Captcha Build()
         {
-            if (CapchaGenOptions is null) throw new ArgumentNullException("CapchaGenOptions was not set");
+            if (CaptchaGenOptions is null) throw new ArgumentNullException("captcha generate options was not set");
             var captcha = new Captcha()
             {
-                Type = CaptchaType.Question,
-                Image = CaptchaUtil.GetImage(CapchaGenOptions, CaptchaUtil.GenCapchaText(Length)),
-                Pixel = new(CapchaGenOptions.Width, CapchaGenOptions.Height)
+                Type = CaptchaType.Character,
+                Image = CaptchaUtil.GenerateImage(CaptchaGenOptions, chars.GenCharacterText(Length), Nosie, GenLines),
+                Pixel = new (CaptchaGenOptions.Width, CaptchaGenOptions.Height)
             };
             return captcha;
         }
 
-        public override CaptchaBuilder WithGenOption(CapchaGenOptions options)
+        public override CaptchaBuilder WithGenOption(CaptchaGenOptions options)
         {
-            CapchaGenOptions = options;
+            CaptchaGenOptions = options;
             return this;
         }
 
@@ -29,9 +30,20 @@ namespace BlogYes.Application.Captchas.Builder
             return this;
         }
 
-        public override CaptchaBuilder WithNoise(int count)
+        public override CaptchaBuilder WithNoise()
         {
-            Nosie = count;
+            Nosie = true;
+            return this;
+        }
+        public CharacterCaptchaBuilder WithLowerCase()
+        {
+            chars = chars.Concat(CaptchaUtil.LowerChars);
+            return this;
+        }
+
+        public CharacterCaptchaBuilder WithUpperCase()
+        {
+            chars = chars.Concat(CaptchaUtil.UpperChars);
             return this;
         }
     }

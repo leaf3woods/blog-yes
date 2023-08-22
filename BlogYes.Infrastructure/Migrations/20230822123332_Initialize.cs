@@ -63,8 +63,7 @@ namespace BlogYes.Infrastructure.Migrations
                         name: "FK_Scopes_Roles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "Roles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -209,7 +208,7 @@ namespace BlogYes.Infrastructure.Migrations
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "DeleteTime", "DisplayName", "Email", "Passphrase", "RegisterTime", "RoleId", "Salt", "SoftDeleted", "TelephoneNumber", "Username" },
-                values: new object[] { new Guid("49450bf9-e270-4293-8bca-0fb0c11db70e"), null, "developer", "unknow", "Uh+8E9ft9jptdMzAVRKo0UYQtqn5epsbJUZQGbL/Xhk=", new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new Guid("e8df3280-8ab1-4b45-8d6a-6c3e669317ac"), "5+fPPv0FShtKo3ed746TiuNojEZsxuPkhbU+YvF5DuQ=", false, "unknow", "dev" });
+                values: new object[] { new Guid("b6770d16-0ff0-436d-a4fd-ea18df643eae"), null, "developer", "unknow", "Uh+8E9ft9jptdMzAVRKo0UYQtqn5epsbJUZQGbL/Xhk=", new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new Guid("e8df3280-8ab1-4b45-8d6a-6c3e669317ac"), "5+fPPv0FShtKo3ed746TiuNojEZsxuPkhbU+YvF5DuQ=", false, "unknow", "dev" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Blogs_CategoryId",
@@ -270,9 +269,9 @@ namespace BlogYes.Infrastructure.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Roles_Name",
+                name: "IX_Roles_Name_SoftDeleted",
                 table: "Roles",
-                column: "Name",
+                columns: new[] { "Name", "SoftDeleted" },
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -296,9 +295,9 @@ namespace BlogYes.Infrastructure.Migrations
                 column: "SoftDeleted");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_Username",
+                name: "IX_Users_Username_SoftDeleted",
                 table: "Users",
-                column: "Username",
+                columns: new[] { "Username", "SoftDeleted" },
                 unique: true);
         }
 

@@ -14,9 +14,9 @@ namespace BlogYes.Application.Captchas.Builder
             return captcha;
         }
 
-        public override CaptchaBuilder WithGenOption(CapchaGenOptions options)
+        public override CaptchaBuilder WithGenOption(CaptchaGenOptions options)
         {
-            CapchaGenOptions = options;
+            CaptchaGenOptions = options;
             return this;
         }
 
@@ -26,9 +26,9 @@ namespace BlogYes.Application.Captchas.Builder
             return this;
         }
 
-        public override CaptchaBuilder WithNoise(int count)
+        public override CaptchaBuilder WithNoise()
         {
-            Nosie = count;
+            Nosie = true;
             return this;
         }
     }

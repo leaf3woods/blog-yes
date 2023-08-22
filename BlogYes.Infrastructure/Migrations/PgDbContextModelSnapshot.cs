@@ -334,7 +334,7 @@ namespace BlogYes.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("b3fd20dc-f1fe-4bc4-99ea-506e05efd19b"),
+                            Id = new Guid("b6770d16-0ff0-436d-a4fd-ea18df643eae"),
                             DisplayName = "developer",
                             Email = "unknow",
                             Passphrase = "Uh+8E9ft9jptdMzAVRKo0UYQtqn5epsbJUZQGbL/Xhk=",
@@ -420,9 +420,7 @@ namespace BlogYes.Infrastructure.Migrations
                 {
                     b.HasOne("BlogYes.Domain.Entities.Role", "Role")
                         .WithMany("Scopes")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("RoleId");
 
                     b.Navigation("Role");
                 });
