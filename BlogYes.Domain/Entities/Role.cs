@@ -1,6 +1,4 @@
-﻿using BlogYes.Application.Auth;
-using BlogYes.Domain.Entities.Base;
-using BlogYes.Domain.Utilities;
+﻿using BlogYes.Domain.Entities.Base;
 
 namespace BlogYes.Domain.Entities
 {

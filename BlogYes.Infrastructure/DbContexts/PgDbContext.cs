@@ -60,7 +60,7 @@ namespace BlogYes.Infrastructure.DbContexts
                 .HasIndex(u => u.SoftDeleted);
 
             modelBuilder.Entity<Role>()
-                .HasIndex(r => r.Name)
+                .HasIndex(r => new { r.Name, r.SoftDeleted})
                 .IsUnique();
 
             modelBuilder.Entity<Role>()
@@ -88,7 +88,7 @@ namespace BlogYes.Infrastructure.DbContexts
                 .HasData(User.Seeds);
 
             modelBuilder.Entity<User>()
-                .HasIndex(u => u.Username)
+                .HasIndex(u => new { u.Username, u.SoftDeleted})
                 .IsUnique();
 
             modelBuilder.Entity<User>()

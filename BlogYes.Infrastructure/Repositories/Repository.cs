@@ -42,11 +42,15 @@ namespace BlogYes.Infrastructure.Repositories
             return count;
         }
 
-        public IQueryable<TEntity> GetQueryWhere(Expression<Func<TEntity, bool>>? expression = null)
+        public IQueryable<TEntity> GetQueryWhere(Expression<Func<TEntity, bool>>? expression = null, bool track = true)
         {
-            return expression == null ?
+            var set = track ?
                 DbContext.Set<TEntity>() :
-                DbContext.Set<TEntity>().Where(expression);
+                DbContext.Set<TEntity>().AsNoTracking();
+            var query = expression == null ? 
+                set :
+                set.Where(expression);
+            return query;
         }
 
         public async Task<PaginatedList<TEntity>> GetPaginatedAsync(int pageIndex, int pageSize)

@@ -34,7 +34,7 @@ namespace BlogYes.WebApi.Controllers
         /// <returns></returns>
         [HttpGet]
         [Authorize]
-        [Route("id/{userId:guid}")]
+        [Route("{userId:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Authorize(Policy = $"{ManagedResource.User}.{ManagedAction.Read}.{ManagedItem.Id}")]
@@ -76,7 +76,7 @@ namespace BlogYes.WebApi.Controllers
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<int> Register(UserRegisterDto registerDto) =>
+        public async Task<UserReadDto?> Register(UserRegisterDto registerDto) =>
             await _userService.RegisterAsync(registerDto);
 
         /// <summary>
@@ -85,11 +85,25 @@ namespace BlogYes.WebApi.Controllers
         /// <param name="userId"></param>
         /// <returns></returns>
         [HttpDelete]
-        [Route("id/{userId:guid}")]
+        [Route("{userId:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Authorize(Policy = $"{ManagedResource.User}.{ManagedAction.Delete}.{ManagedItem.Id}")]
         public async Task<int> Delete(Guid userId) =>
             await _userService.DeleteAsync(userId);
+
+        /// <summary>
+        ///     切换权限
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="roleId"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("{userId:guid}/role/{roleId:guid}")]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<UserReadDto?> ModifyRole(Guid userId, Guid roleId) =>
+            await _userService.ChangeRole(userId, roleId);
     }
 }

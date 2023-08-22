@@ -33,7 +33,7 @@ namespace BlogYes.WebApi.Controllers
         /// <param name="roleId"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route("id/{roleId:guid}")]
+        [Route("{roleId:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Authorize(Policy = $"{ManagedResource.Role}.{ManagedAction.Read}.{ManagedItem.Id}")]
@@ -71,7 +71,7 @@ namespace BlogYes.WebApi.Controllers
         /// <param name="scopes"></param>
         /// <returns></returns>
         [HttpPut]
-        [Route("id/{roleId:guid}/scopes")]
+        [Route("{roleId:guid}/scopes")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Authorize(Policy = $"{ManagedResource.Role}.{ManagedAction.Update}.{"Scopes"}")]

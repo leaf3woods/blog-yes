@@ -16,18 +16,22 @@ namespace BlogYes.Application.Services
     public class UserService : BaseService, IUserService
     {
         public UserService(
-            IUserRepository userRepository
+            IUserRepository userRepository,
+            IRoleRepository roleRepository
             )
         {
             _userRepository = userRepository;
+            _roleRepository = roleRepository;
         }
 
         private readonly IUserRepository _userRepository;
+        private readonly IRoleRepository _roleRepository;
 
-        public async Task<int> RegisterAsync(UserRegisterDto registerDto)
+        public async Task<UserReadDto?> RegisterAsync(UserRegisterDto registerDto)
         {
             var user = Mapper.Map<User>(registerDto);
-            return await _userRepository.CreateAsync(user);
+            var count = await _userRepository.CreateAsync(user);
+            return count == 0 ? null : Mapper.Map<UserReadDto>(user);
         }
 
         public async Task<string> LoginAsync(UserLoginDto credential)
@@ -51,9 +55,9 @@ namespace BlogYes.Application.Services
         }
 
         [Scope("get single user by id", ManagedResource.User, ManagedAction.Read, ManagedItem.Id)]
-        public async Task<UserReadDto> GetUserAsync(Guid id)
+        public async Task<UserReadDto?> GetUserAsync(Guid id)
         {
-            var user = await _userRepository.FindAsync(id);
+            var user = await _userRepository.GetQueryWhere(u => u.Id == id).Include(u => u.Role).FirstOrDefaultAsync();
             var result = Mapper.Map<UserReadDto>(user);
             return result;
         }
@@ -61,19 +65,21 @@ namespace BlogYes.Application.Services
         [Scope("get all users", ManagedResource.User, ManagedAction.Read, ManagedItem.All)]
         public async Task<IEnumerable<UserReadDto>> GetUsersAsync()
         {
-            var users = await _userRepository.GetQueryWhere().ToArrayAsync();
+            var users = await _userRepository.GetQueryWhere().Include(u => u.Role).ToArrayAsync();
             var results = Mapper.Map<IEnumerable<UserReadDto>>(users);
             return results;
         }
 
-        public async Task<int> ChangeRole(Guid userId, Guid roleId)
+        [Scope("change user role", ManagedResource.User, ManagedAction.Update, "Role")]
+        public async Task<UserReadDto?> ChangeRole(Guid userId, Guid roleId)
         {
             var user = (await _userRepository.FindAsync(userId)) ??
                 throw new Exception("user not find");
-            if (await _userRepository.FindAsync(roleId) is null)
+            if(await _roleRepository.FindAsync(roleId) is null)
                 throw new Exception("role not find");
             user.RoleId = roleId;
-            return await _userRepository.UpdateAsync(user);
+            var count = await _userRepository.UpdateAsync(user);
+            return count == 0 ? null : Mapper.Map<UserReadDto>(user);
         }
     }
 }

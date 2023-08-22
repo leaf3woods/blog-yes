@@ -37,7 +37,10 @@ namespace BlogYes.Application.Services
         [Scope("get role info by id", ManagedResource.Role, ManagedAction.Read, ManagedItem.Id)]
         public async Task<RoleReadDto?> GetRoleAsync(Guid id)
         {
-            var role = await _roleRepository.FindAsync(id);
+            var role = await _roleRepository
+                .GetQueryWhere(r => r.Id == id)
+                .Include(r => r.Scopes)
+                .FirstOrDefaultAsync();
             var dto = Mapper.Map<RoleReadDto>(role);
             return dto;
         }
@@ -45,7 +48,10 @@ namespace BlogYes.Application.Services
         [Scope("get all roles", ManagedResource.Role, ManagedAction.Read, ManagedItem.All)]
         public async Task<IEnumerable<RoleReadDto>> GetRolesAsync()
         {
-            var roles = await _roleRepository.GetQueryWhere().Include(r => r.Scopes).ToArrayAsync();
+            var roles = await _roleRepository
+                .GetQueryWhere()
+                .Include(r => r.Scopes)
+                .ToArrayAsync();
             var dtos = Mapper.Map<IEnumerable<RoleReadDto>>(roles);
             return dtos;
         }

@@ -11,7 +11,7 @@ namespace BlogYes.Domain.Repositories
 
         public Task<int> CreateRangeAsync(IEnumerable<TEntity> dtos);
 
-        public IQueryable<TEntity> GetQueryWhere(Expression<Func<TEntity, bool>>? expression = null);
+        public IQueryable<TEntity> GetQueryWhere(Expression<Func<TEntity, bool>>? expression = null, bool track = true);
 
         public Task<PaginatedList<TEntity>> GetPaginatedAsync(int pageIndex, int pageSize);
     }
