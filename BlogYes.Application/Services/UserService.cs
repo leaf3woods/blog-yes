@@ -1,4 +1,6 @@
 ﻿using BlogYes.Application.Auth;
+using BlogYes.Application.Captchas;
+using BlogYes.Application.Captchas.Builder;
 using BlogYes.Application.Dtos;
 using BlogYes.Application.Services.Base;
 using BlogYes.Application.Utilities;
@@ -80,6 +82,19 @@ namespace BlogYes.Application.Services
             user.RoleId = roleId;
             var count = await _userRepository.UpdateAsync(user);
             return count == 0 ? null : Mapper.Map<UserReadDto>(user);
+        }
+
+        public Captcha GetCaptcha()
+        {
+            var captcha = CaptchaBuilder.CreateType(CaptchaType.Character)
+                .WithGenOption(new CapchaGenOptions
+                {
+                    FontFamily = "",
+                    FontSize = 10,
+                    Height = 200,
+                    Width = 50,
+                }).WithNoise(2).WithLines().Build();
+            return captcha;
         }
     }
 }
