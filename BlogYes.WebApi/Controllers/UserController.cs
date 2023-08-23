@@ -104,6 +104,6 @@ namespace BlogYes.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<UserReadDto?> ModifyRole(Guid userId, Guid roleId) =>
-            await _userService.ChangeRole(userId, roleId);
+            await _userService.ChangeRoleAsync(userId, roleId);
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace BlogYes.Application.Captchas.Builder
+﻿using BlogYes.Domain.Entities;
+
+namespace BlogYes.Application.Captchas.Builder
 {
     public abstract class CaptchaBuilder
     {
@@ -18,12 +20,5 @@
         }
 
         public abstract Captcha Build();
-    }
-
-    public enum CaptchaType
-    {
-        Question,
-        Han,
-        Character
     }
 }

@@ -24,6 +24,6 @@ namespace BlogYes.WebApi.Controllers
         [Route("captcha")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<CaptchaReadDto> GetCaptcha() => _userService.GenerateCaptcha();
+        public async Task<ActionResult<CaptchaReadDto>> GetCaptcha() => await _userService.GenerateCaptchaAsync();
     }
 }

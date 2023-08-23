@@ -25,6 +25,9 @@ namespace BlogYes.Application.Utilities.MapperProfiles.DtoProfiles
                 .ForMember(dest => dest.Image, opts => opts.MapFrom(src => src.Image == null ? string.Empty : src.ToString()))
                 .ForMember(dest => dest.Type, opts => opts.MapFrom(src => src.Type.ToString("F")))
                 .ForMember(dest => dest.Pixel, opts => opts.MapFrom(src => new int[] { src.Pixel.Item1, src.Pixel.Item2 }));
+            CreateMap<CaptchaAnswerDto, Captcha>()
+                .ForMember(dest => dest.Image, opts => opts.Ignore())
+                .ForMember(dest => dest.Pixel, opts => opts.Ignore());
         }
     }
 }

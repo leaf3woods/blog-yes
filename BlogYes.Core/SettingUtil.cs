@@ -18,6 +18,8 @@ namespace BlogYes.Core.Utilities
 
         public static JwtSettings Jwt { get; private set; } = new JwtSettings();
 
+        public static bool IsDevelopment { get; private set; } = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development";
+
         public class JwtSettings
         {
             public string KeyFolder { get; set; } = null!;

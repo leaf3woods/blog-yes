@@ -1,6 +1,7 @@
 ﻿namespace BlogYes.Domain.Services
 {
-    public class DomainService
+    public interface IDomainService
     {
+        
     }
 }

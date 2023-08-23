@@ -1,4 +1,5 @@
-﻿
+﻿using BlogYes.Domain.Entities;
+
 namespace BlogYes.Application.Captchas.Builder
 {
     public class CharacterCaptchaBuilder : CaptchaBuilder
@@ -9,11 +10,13 @@ namespace BlogYes.Application.Captchas.Builder
         public override Captcha Build()
         {
             if (CaptchaGenOptions is null) throw new ArgumentNullException("captcha generate options was not set");
+            var text = chars.GenCharacterText(Length);
             var captcha = new Captcha()
             {
                 Type = CaptchaType.Character,
-                Image = CaptchaUtil.GenerateImage(CaptchaGenOptions, chars.GenCharacterText(Length), Nosie, GenLines),
-                Pixel = new (CaptchaGenOptions.Width, CaptchaGenOptions.Height)
+                Image = CaptchaUtil.GenerateImage(CaptchaGenOptions, text, Nosie, GenLines),
+                Pixel = new (CaptchaGenOptions.Width, CaptchaGenOptions.Height),
+                Answer = new string(text)
             };
             return captcha;
         }

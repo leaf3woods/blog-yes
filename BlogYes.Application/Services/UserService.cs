@@ -8,6 +8,7 @@ using BlogYes.Core;
 using BlogYes.Core.Utilities;
 using BlogYes.Domain.Entities;
 using BlogYes.Domain.Repositories;
+using BlogYes.Domain.Services;
 using BlogYes.Domain.Utilities;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
@@ -19,15 +20,18 @@ namespace BlogYes.Application.Services
     {
         public UserService(
             IUserRepository userRepository,
-            IRoleRepository roleRepository
+            IRoleRepository roleRepository,
+            ILoginService loginService
             )
         {
             _userRepository = userRepository;
             _roleRepository = roleRepository;
+            _loginService = loginService;
         }
 
         private readonly IUserRepository _userRepository;
         private readonly IRoleRepository _roleRepository;
+        private readonly ILoginService _loginService;
 
         public async Task<UserReadDto?> RegisterAsync(UserRegisterDto registerDto)
         {
@@ -38,8 +42,16 @@ namespace BlogYes.Application.Services
 
         public async Task<string> LoginAsync(UserLoginDto credential)
         {
+            var answer = Mapper.Map<Captcha>(credential.Captcha);
+
+            if(!SettingUtil.IsDevelopment
+                && !await _loginService.VerifyCaptchaAnswerAsync(answer))
+            {
+                throw new Exception("captcha not correct");
+            }
             var user = await _userRepository.FindAsync(credential.Username);
             var bytes = Convert.FromBase64String(credential.Password);
+
             if (user is null || !user.Verify(bytes))
             {
                 throw new Exception("user not exist or password error");
@@ -47,6 +59,12 @@ namespace BlogYes.Application.Services
             var token = CryptoUtil.GenerateJwtToken(SettingUtil.Jwt.Issuer, SettingUtil.Jwt.Audience, SettingUtil.Jwt.ExpireMin,
                 new Claim(CustomClaimsType.UserId, user.Id.ToString()), new Claim(CustomClaimsType.RoleId, user.Role.Id.ToString())) ??
                 throw new Exception("generate jwt token error");
+
+            if (!await _loginService.VerifyTokenAsync(user.Id, token))
+            {
+                throw new Exception("user is logged in elsewhere");
+            }
+            await _loginService.CacheTokenAsync(user.Id, token);
             return token;
         }
 
@@ -73,7 +91,7 @@ namespace BlogYes.Application.Services
         }
 
         [Scope("change user role", ManagedResource.User, ManagedAction.Update, "Role")]
-        public async Task<UserReadDto?> ChangeRole(Guid userId, Guid roleId)
+        public async Task<UserReadDto?> ChangeRoleAsync(Guid userId, Guid roleId)
         {
             var user = (await _userRepository.FindAsync(userId)) ??
                 throw new Exception("user not find");
@@ -84,7 +102,7 @@ namespace BlogYes.Application.Services
             return count == 0 ? null : Mapper.Map<UserReadDto>(user);
         }
 
-        public CaptchaReadDto GenerateCaptcha()
+        public async Task<CaptchaReadDto> GenerateCaptchaAsync()
         {
             //var builder = CaptchaBuilder.Create<CharacterCaptchaBuilder>()
             //    .WithLowerCase()
@@ -96,6 +114,7 @@ namespace BlogYes.Application.Services
                 Height = 80,
                 Width = 200,
             }).WithNoise().WithLines().Build();
+            await _loginService.CacheCaptchaAnswerAsync(captcha, 180);
             return Mapper.Map<CaptchaReadDto>(captcha);
         }
     }

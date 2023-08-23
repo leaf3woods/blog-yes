@@ -1,5 +1,4 @@
-﻿using BlogYes.Application.Captchas.Builder;
-using BlogYes.Application.Dtos.Base;
+﻿using BlogYes.Application.Dtos.Base;
 using BlogYes.Domain.ValueObjects.UserValue;
 
 namespace BlogYes.Application.Dtos
@@ -31,6 +30,7 @@ namespace BlogYes.Application.Dtos
     {
         public string Username { get; set; } = null!;
         public string Password { get; set; } = null!;
+        public CaptchaAnswerDto? Captcha { get; set; }
     }
 
     public class UserSettingReadDto : ReadDto
@@ -46,8 +46,16 @@ namespace BlogYes.Application.Dtos
 
     public class CaptchaReadDto : ReadDto
     {
+        public Guid Id { get; set; }
         public string Type { get; set; } = null!;
         public int[] Pixel { get; set; } = null!;
         public string Image { get; set; } = null!;
+    }
+
+    public class CaptchaAnswerDto
+    {
+        public Guid Id { get; set; }
+        public string Type { get; set; } = null!;
+        public string Answer { get; set; } = null!;
     }
 }

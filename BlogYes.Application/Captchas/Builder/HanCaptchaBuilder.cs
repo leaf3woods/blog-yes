@@ -1,4 +1,6 @@
 ﻿
+using BlogYes.Domain.Entities;
+
 namespace BlogYes.Application.Captchas.Builder
 {
     public class HanCaptchaBuilder : CaptchaBuilder

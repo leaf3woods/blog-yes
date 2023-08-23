@@ -1,5 +1,4 @@
-﻿using BlogYes.Application.Captchas;
-using BlogYes.Application.Dtos;
+﻿using BlogYes.Application.Dtos;
 
 namespace BlogYes.Application.Services.Base
 {
@@ -15,9 +14,9 @@ namespace BlogYes.Application.Services.Base
 
         public Task<IEnumerable<UserReadDto>> GetUsersAsync();
 
-        public Task<UserReadDto?> ChangeRole(Guid userId, Guid roleId);
+        public Task<UserReadDto?> ChangeRoleAsync(Guid userId, Guid roleId);
 
-        public CaptchaReadDto GenerateCaptcha();
+        public Task<CaptchaReadDto> GenerateCaptchaAsync();
 
     }
 }

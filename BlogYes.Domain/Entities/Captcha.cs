@@ -1,15 +1,16 @@
-﻿
-using BlogYes.Application.Captchas.Builder;
+﻿using BlogYes.Domain.Entities.Base;
 
-namespace BlogYes.Application.Captchas
+namespace BlogYes.Domain.Entities
 {
-    public class Captcha
+    public class Captcha : UniversalEntity
     {
         public CaptchaType Type { get; set; }
 
         public (int, int) Pixel { get; set; }
 
         public byte[]? Image { get; set; }
+
+        public string Answer { get; set; } = null!;
 
         public override string ToString()
         {
@@ -18,5 +19,11 @@ namespace BlogYes.Application.Captchas
                 Convert.ToBase64String(Image);
             return "data:image/png;base64," + base64;
         }
+    }
+    public enum CaptchaType
+    {
+        Question,
+        Han,
+        Character
     }
 }

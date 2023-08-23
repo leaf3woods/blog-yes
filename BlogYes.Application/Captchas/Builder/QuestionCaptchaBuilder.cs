@@ -1,4 +1,6 @@
 ﻿
+using BlogYes.Domain.Entities;
+
 namespace BlogYes.Application.Captchas.Builder
 {
     public class QuestionCaptchaBuilder : CaptchaBuilder
@@ -6,12 +8,13 @@ namespace BlogYes.Application.Captchas.Builder
         public override Captcha Build()
         {
             if (CaptchaGenOptions is null) throw new ArgumentNullException("CapchaGenOptions was not set");
-            var equation = CaptchaUtil.GenEquation(out var tuple);
+            var equation = CaptchaUtil.GenEquation(out var answer);
             var captcha = new Captcha()
             {
                 Type = CaptchaType.Question,
                 Image = CaptchaUtil.GenerateImage(CaptchaGenOptions, equation, Nosie, GenLines),
-                Pixel = new (CaptchaGenOptions.Width, CaptchaGenOptions.Height)
+                Pixel = new (CaptchaGenOptions.Width, CaptchaGenOptions.Height),
+                Answer = answer.ToString()
             };
             return captcha;
         }

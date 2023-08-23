@@ -1,6 +1,8 @@
 ﻿using Autofac;
 using BlogYes.Infrastructure.DbContexts;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using StackExchange.Redis;
 
 namespace BlogYes.Application.Utilities.InjectionModules
 {
@@ -8,10 +10,13 @@ namespace BlogYes.Application.Utilities.InjectionModules
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.Register(_ => new LoggerFactory().CreateLogger("Adapter"))
+            builder.RegisterInstance(new LoggerFactory().CreateLogger("Adapter"))
                 .AsImplementedInterfaces()
                 .SingleInstance();
             builder.RegisterType<InitialDatabase>()
+                .SingleInstance();
+            builder.Register(context => ConnectionMultiplexer.Connect(context.Resolve<IConfiguration>().GetConnectionString("Redis")!))
+                .AsImplementedInterfaces()
                 .SingleInstance();
         }
     }
