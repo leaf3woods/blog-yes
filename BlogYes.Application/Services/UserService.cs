@@ -113,7 +113,7 @@ namespace BlogYes.Application.Services
                 FontFamily = "consolas",
                 Height = 80,
                 Width = 200,
-            }).WithNoise().WithLines().Build();
+            }).WithNoise().WithLines().WithCircles().Build();
             await _loginService.CacheCaptchaAnswerAsync(captcha, 180);
             return Mapper.Map<CaptchaReadDto>(captcha);
         }

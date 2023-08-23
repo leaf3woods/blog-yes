@@ -7,12 +7,12 @@ namespace BlogYes.Application.Captchas.Builder
     {
         public override Captcha Build()
         {
-            if (CaptchaGenOptions is null) throw new ArgumentNullException("CapchaGenOptions was not set");
+            if (CaptchaGenOptions is null) throw new ArgumentNullException("captcha generate options was not set");
             var equation = CaptchaUtil.GenEquation(out var answer);
             var captcha = new Captcha()
             {
                 Type = CaptchaType.Question,
-                Image = CaptchaUtil.GenerateImage(CaptchaGenOptions, equation, Nosie, GenLines),
+                Image = CaptchaUtil.GenerateImage(CaptchaGenOptions, equation, GenNosie, GenLines, GenCircles),
                 Pixel = new (CaptchaGenOptions.Width, CaptchaGenOptions.Height),
                 Answer = answer.ToString()
             };
@@ -33,7 +33,13 @@ namespace BlogYes.Application.Captchas.Builder
 
         public override CaptchaBuilder WithNoise()
         {
-            Nosie = true;
+            GenNosie = true;
+            return this;
+        }
+
+        public override CaptchaBuilder WithCircles()
+        {
+            GenCircles = true;
             return this;
         }
     }

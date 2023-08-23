@@ -1,4 +1,5 @@
 ﻿using SkiaSharp;
+using System.Drawing;
 using System.Reflection;
 
 namespace BlogYes.Application.Captchas
@@ -17,9 +18,14 @@ namespace BlogYes.Application.Captchas
 
         private const float _noiseSize = (float)1;
 
-        private const int _blank = 10; 
+        private const int _blank = 10;
 
-        public static byte[] GenerateImage(CaptchaGenOptions options, char[] text, bool noise = false, bool line = false)
+        private static (int, int) _circleRadiusRange = new(6, 12);
+
+        private static (int, int) _circleCountRange = new(4, 8);
+
+        public static byte[] GenerateImage(CaptchaGenOptions options, char[] text,
+            bool noise = false, bool line = false, bool circle = false)
         {
             var random = new Random();
             if (options is null) throw new Exception("no options was set");
@@ -31,23 +37,38 @@ namespace BlogYes.Application.Captchas
             
             var fontSize = (options.Width - 2 * _blank) / text.Length;
             using var drawStyle = new SKPaint { IsAntialias = true, TextSize = fontSize };
+
+            if (circle)
+            {
+                var count = random.Next(_circleCountRange.Item1, _circleCountRange.Item2);
+                drawStyle.Style = SKPaintStyle.Stroke;
+                drawStyle.StrokeWidth = 2;
+                for (int i = 0; i < count; i++)
+                {
+                    drawStyle.Color = Colors[random.Next(0, Colors.Length - 1)];
+                    canvas.DrawCircle(random.Next(options.Width), random.Next(options.Height),
+                        random.Next(_circleRadiusRange.Item1, _circleRadiusRange.Item2), drawStyle);
+                }
+                drawStyle.Style = SKPaintStyle.Fill;
+                drawStyle.StrokeWidth = 1;
+            }
+
+            using var font = SKTypeface.FromFamilyName(options.FontFamily, SKFontStyleWeight.SemiBold, SKFontStyleWidth.ExtraCondensed, SKFontStyleSlant.Upright);
+            float py = (options.Height) / 2;
+            drawStyle.Typeface = font;
+            var offset = fontSize / (float)1.5;
             for (int i = 0; i < text.Length; i++)
             {
-                var font = SKTypeface.FromFamilyName(options.FontFamily, SKFontStyleWeight.SemiBold, SKFontStyleWidth.ExtraCondensed, SKFontStyleSlant.Upright);
-                float angle = random.Next(-_angleRange, _angleRange);
                 float px = i * fontSize + _blank;
-                float py = (options.Height) / 2;
-                
-                canvas.Translate(12, 12);
+                float angle = random.Next(-_angleRange, _angleRange);
+                canvas.Translate(offset, offset);
                 canvas.RotateDegrees(angle, px, py);
-                drawStyle.Typeface = font;
                 drawStyle.Color = Colors[random.Next(0, Colors.Length - 1)];
                 canvas.DrawText(text[i].ToString(), px, py, drawStyle);
-                
                 canvas.RotateDegrees(-angle, px, py);
-                canvas.Translate(-12, -12);
+                canvas.Translate(-offset, -offset);
             }
-            
+
             if(noise)
             {
                 for (int i = 0; i < options.Width * 2; i++)
@@ -107,7 +128,7 @@ namespace BlogYes.Application.Captchas
                     result = (first - next);
                     break;
                 case Operator.Multiply:
-                    chars = $"{first}x{next}=?";
+                    chars = $"{first}*{next}=?";
                     result = (first * next);
                     break;
                 default:
@@ -118,9 +139,8 @@ namespace BlogYes.Application.Captchas
 
         public static readonly SKColor[] Colors = typeof(SKColors)
             .GetFields(BindingFlags.Public | BindingFlags.Static)
-            .Where(f => !f.Name.Contains("White") && !f.Name.Contains("Light") && 
-                        f.Name != "Empty" && f.Name != "Transparent")
             .Select(f => (SKColor)f.GetValue(null)!)
+            .Where(f => f.Alpha != 0 && ((0.299 * f.Red + 0.587 * f.Green + 0.114 * f.Blue) / 255.0) >= 0.5)
             .ToArray();
 
         public static readonly IEnumerable<int> NumChars = Enumerable.Range(48, 10);

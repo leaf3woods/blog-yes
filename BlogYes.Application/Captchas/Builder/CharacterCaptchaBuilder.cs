@@ -14,7 +14,7 @@ namespace BlogYes.Application.Captchas.Builder
             var captcha = new Captcha()
             {
                 Type = CaptchaType.Character,
-                Image = CaptchaUtil.GenerateImage(CaptchaGenOptions, text, Nosie, GenLines),
+                Image = CaptchaUtil.GenerateImage(CaptchaGenOptions, text, GenNosie, GenLines, GenCircles),
                 Pixel = new (CaptchaGenOptions.Width, CaptchaGenOptions.Height),
                 Answer = new string(text)
             };
@@ -35,9 +35,16 @@ namespace BlogYes.Application.Captchas.Builder
 
         public override CaptchaBuilder WithNoise()
         {
-            Nosie = true;
+            GenNosie = true;
             return this;
         }
+
+        public override CaptchaBuilder WithCircles()
+        {
+            GenCircles = true;
+            return this;
+        }
+
         public CharacterCaptchaBuilder WithLowerCase()
         {
             chars = chars.Concat(CaptchaUtil.LowerChars);

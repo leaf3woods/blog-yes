@@ -30,7 +30,13 @@ namespace BlogYes.Application.Captchas.Builder
 
         public override CaptchaBuilder WithNoise()
         {
-            Nosie = true;
+            GenNosie = true;
+            return this;
+        }
+
+        public override CaptchaBuilder WithCircles()
+        {
+            GenCircles = true;
             return this;
         }
     }
