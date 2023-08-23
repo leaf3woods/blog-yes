@@ -28,7 +28,6 @@
 
   <ItemGroup>
     <Folder Include="Keys\" />
-    <Folder Include="Utilities\" />
   </ItemGroup>
 
   <PropertyGroup>

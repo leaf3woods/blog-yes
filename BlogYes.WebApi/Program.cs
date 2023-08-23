@@ -5,12 +5,15 @@ using BlogYes.Application.Utilities;
 using BlogYes.Core.Utilities;
 using BlogYes.Domain.Utilities;
 using BlogYes.Infrastructure.DbContexts;
+using BlogYes.WebApi.Utilities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Npgsql;
 using Serilog;
+using System.Net;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -133,6 +136,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+else
+{
+    app.UseExceptionHandler(builder => 
+    builder.Run(async context =>
+    await ExceptionLocalizerExtension.LocalizeException(context)));
+}
 
 app.UseHttpsRedirection();
 
@@ -141,6 +150,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-(app.Services.GetService<InitialDatabase>())?.Initialize();
+app.Services.GetService<InitialDatabase>()?.Initialize();
 
 app.Run();
