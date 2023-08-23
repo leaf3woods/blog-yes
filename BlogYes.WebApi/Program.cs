@@ -136,12 +136,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-else
-{
-    app.UseExceptionHandler(builder => 
-    builder.Run(async context =>
-    await ExceptionLocalizerExtension.LocalizeException(context)));
-}
 
 app.UseHttpsRedirection();
 
@@ -151,5 +145,9 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Services.GetService<InitialDatabase>()?.Initialize();
+
+app.UseExceptionHandler(builder =>
+    builder.Run(async context =>
+        await ExceptionLocalizerExtension.LocalizeException(context)));
 
 app.Run();
