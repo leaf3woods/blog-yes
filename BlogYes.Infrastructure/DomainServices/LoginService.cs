@@ -28,6 +28,13 @@ namespace BlogYes.Infrastructure.DomainServices
             await database.StringSetAsync(key, token);
         }
 
+        public async Task<bool> DeleteTokenAsync(Guid userId)
+        {
+            var databse = _connectionMultiplexer.GetDatabase();
+            var key = string.Format(CacheKeyFormatter.Token, userId);
+            return await databse.KeyDeleteAsync(key);
+        }
+
         public async Task<bool> VerifyCaptchaAnswerAsync(Captcha captcha)
         {
             var database = _connectionMultiplexer.GetDatabase();

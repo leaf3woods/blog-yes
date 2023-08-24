@@ -1,6 +1,7 @@
 ﻿using BlogYes.Application.Auth;
 using BlogYes.Application.Dtos;
 using BlogYes.Application.Services.Base;
+using BlogYes.WebApi.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -37,8 +38,8 @@ namespace BlogYes.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Authorize(Policy = $"{ManagedResource.Role}.{ManagedAction.Read}.{ManagedItem.Id}")]
-        public async Task<ActionResult<RoleReadDto?>> GetRole(Guid roleId) =>
-            Ok(await _roleService.GetRoleAsync(roleId));
+        public async Task<ResponseWrapper<RoleReadDto?>> GetRole(Guid roleId) =>
+            (await _roleService.GetRoleAsync(roleId)).Wrap();
 
         /// <summary>
         ///     获取所有角色
@@ -49,8 +50,8 @@ namespace BlogYes.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Authorize(Policy = $"{ManagedResource.Role}.{ManagedAction.Read}.{ManagedItem.All}")]
-        public async Task<ActionResult<IEnumerable<RoleReadDto>>> GetRoles() =>
-            Ok(await _roleService.GetRolesAsync());
+        public async Task<ResponseWrapper<IEnumerable<RoleReadDto>>> GetRoles() =>
+            (await _roleService.GetRolesAsync()).Wrap();
 
         /// <summary>
         ///     创建新角色
@@ -61,8 +62,8 @@ namespace BlogYes.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Authorize(Policy = $"{ManagedResource.Role}.{ManagedAction.Create}.{ManagedItem.Dto}")]
-        public async Task<ActionResult<RoleReadDto?>> CreateRole(RoleCreateDto roleDto) =>
-            Ok(await _roleService.CreateRoleAsync(roleDto));
+        public async Task<ResponseWrapper<RoleReadDto?>> CreateRole(RoleCreateDto roleDto) =>
+            (await _roleService.CreateRoleAsync(roleDto)).Wrap();
 
         /// <summary>
         ///     编辑角色权限范围
@@ -75,8 +76,8 @@ namespace BlogYes.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Authorize(Policy = $"{ManagedResource.Role}.{ManagedAction.Update}.{"Scopes"}")]
-        public async Task<ActionResult<int>> ModifyRoleScopeAsync(Guid roleId, List<string> scopes) =>
-            Ok(await _roleService.ModifyRoleScopeAsync(roleId, scopes));
+        public async Task<ResponseWrapper<int>> ModifyRoleScopeAsync(Guid roleId, List<string> scopes) =>
+            ResponseWrapper<int>.Create(await _roleService.ModifyRoleScopeAsync(roleId, scopes));
 
         /// <summary>
         ///     获取支持的权限范围
@@ -87,6 +88,6 @@ namespace BlogYes.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Authorize(Policy = $"{ManagedResource.Role}.{ManagedAction.Read}.{"Scopes"}")]
-        public ActionResult<IEnumerable<RoleScopeReadDto>> GetSupportedScopes() => Ok(_roleService.GetScopes());
+        public ResponseWrapper<IEnumerable<RoleScopeReadDto>> GetSupportedScopes() => (_roleService.GetScopes()).Wrap();
     }
 }

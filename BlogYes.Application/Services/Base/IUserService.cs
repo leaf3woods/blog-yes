@@ -8,6 +8,8 @@ namespace BlogYes.Application.Services.Base
 
         public Task<string> LoginAsync(UserLoginDto credential);
 
+        public Task LogoutAsync();
+
         public Task<int> DeleteAsync(Guid id);
 
         public Task<UserReadDto?> GetUserAsync(Guid id);

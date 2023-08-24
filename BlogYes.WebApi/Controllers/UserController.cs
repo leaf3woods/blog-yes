@@ -1,6 +1,7 @@
 ﻿using BlogYes.Application.Auth;
 using BlogYes.Application.Dtos;
 using BlogYes.Application.Services.Base;
+using BlogYes.WebApi.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -38,8 +39,8 @@ namespace BlogYes.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Authorize(Policy = $"{ManagedResource.User}.{ManagedAction.Read}.{ManagedItem.Id}")]
-        public async Task<ActionResult<UserReadDto>> GetUser(Guid userId) =>
-            Ok(await _userService.GetUserAsync(userId));
+        public async Task<ResponseWrapper<UserReadDto?>> GetUser(Guid userId) =>
+            (await _userService.GetUserAsync(userId)).Wrap();
 
         /// <summary>
         ///     获取所有用户
@@ -50,34 +51,8 @@ namespace BlogYes.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Authorize(Policy = $"{ManagedResource.User}.{ManagedAction.Read}.{ManagedItem.All}")]
-        public async Task<ActionResult<IEnumerable<UserReadDto>>> GetUsers() =>
-            Ok(await _userService.GetUsersAsync());
-
-        /// <summary>
-        ///     用户登录
-        /// </summary>
-        /// <param name="credential"></param>
-        /// <returns></returns>
-        [HttpPost]
-        [Route("login")]
-        [AllowAnonymous]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<string> Login(UserLoginDto credential) =>
-            await _userService.LoginAsync(credential);
-        
-        /// <summary>
-        ///     用户注册
-        /// </summary>
-        /// <param name="registerDto"></param>
-        /// <returns></returns>
-        [HttpPost]
-        [Route("register")]
-        [AllowAnonymous]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<UserReadDto?> Register(UserRegisterDto registerDto) =>
-            await _userService.RegisterAsync(registerDto);
+        public async Task<ResponseWrapper<IEnumerable<UserReadDto>>> GetUsers() =>
+            (await _userService.GetUsersAsync()).Wrap();
 
         /// <summary>
         ///     删除用户
@@ -89,8 +64,8 @@ namespace BlogYes.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Authorize(Policy = $"{ManagedResource.User}.{ManagedAction.Delete}.{ManagedItem.Id}")]
-        public async Task<int> Delete(Guid userId) =>
-            await _userService.DeleteAsync(userId);
+        public async Task<ResponseWrapper<int>> Delete(Guid userId) =>
+            ResponseWrapper<int>.Create(await _userService.DeleteAsync(userId));
 
         /// <summary>
         ///     切换权限
@@ -103,7 +78,7 @@ namespace BlogYes.WebApi.Controllers
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<UserReadDto?> ModifyRole(Guid userId, Guid roleId) =>
-            await _userService.ChangeRoleAsync(userId, roleId);
+        public async Task<ResponseWrapper<UserReadDto?>> ModifyRole(Guid userId, Guid roleId) =>
+            (await _userService.ChangeRoleAsync(userId, roleId)).Wrap();
     }
 }

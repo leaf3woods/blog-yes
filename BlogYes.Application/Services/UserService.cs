@@ -11,6 +11,7 @@ using BlogYes.Domain.Entities;
 using BlogYes.Domain.Repositories;
 using BlogYes.Domain.Services;
 using BlogYes.Domain.Utilities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
@@ -22,17 +23,20 @@ namespace BlogYes.Application.Services
         public UserService(
             IUserRepository userRepository,
             IRoleRepository roleRepository,
-            ILoginService loginService
+            ILoginService loginService,
+            IHttpContextAccessor httpContextAccessor
             )
         {
             _userRepository = userRepository;
             _roleRepository = roleRepository;
             _loginService = loginService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         private readonly IUserRepository _userRepository;
         private readonly IRoleRepository _roleRepository;
         private readonly ILoginService _loginService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public async Task<UserReadDto?> RegisterAsync(UserRegisterDto registerDto)
         {
@@ -69,6 +73,15 @@ namespace BlogYes.Application.Services
             return token;
         }
 
+        [Scope("delete user by id", ManagedResource.User, ManagedAction.Delete, "Logout")]
+        public async Task LogoutAsync()
+        {
+            var userId = _httpContextAccessor.HttpContext.User.Claims
+                .FirstOrDefault(c => c.Type == CustomClaimsType.UserId)!.Value;
+            await _loginService.DeleteTokenAsync(Guid.Parse(userId)!);
+        }
+
+
         [Scope("delete user by id", ManagedResource.User, ManagedAction.Delete, ManagedItem.Id)]
         public async Task<int> DeleteAsync(Guid id)
         {
@@ -78,7 +91,10 @@ namespace BlogYes.Application.Services
         [Scope("get single user by id", ManagedResource.User, ManagedAction.Read, ManagedItem.Id)]
         public async Task<UserReadDto?> GetUserAsync(Guid id)
         {
-            var user = await _userRepository.GetQueryWhere(u => u.Id == id).Include(u => u.Role).FirstOrDefaultAsync();
+            var user = await _userRepository
+                .GetQueryWhere(u => u.Id == id)
+                .Include(u => u.Role)
+                .FirstOrDefaultAsync();
             var result = Mapper.Map<UserReadDto>(user);
             return result;
         }
