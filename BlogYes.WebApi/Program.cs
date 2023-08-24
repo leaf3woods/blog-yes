@@ -2,6 +2,7 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using BlogYes.Application.Auth;
 using BlogYes.Application.Utilities;
+using BlogYes.Core;
 using BlogYes.Core.Utilities;
 using BlogYes.Domain.Utilities;
 using BlogYes.Infrastructure.DbContexts;
@@ -42,8 +43,8 @@ builder.Services.AddLogging();
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
 builder.Services.AddControllers().AddJsonOptions(config =>
 {
-    config.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
-    config.JsonSerializerOptions.PropertyNameCaseInsensitive = false;
+    config.JsonSerializerOptions.DefaultIgnoreCondition = Options.CustomJsonSerializerOptions.DefaultIgnoreCondition;
+    config.JsonSerializerOptions.PropertyNameCaseInsensitive = Options.CustomJsonSerializerOptions.PropertyNameCaseInsensitive;
 });
 
 builder.Services.AddAuthentication(options =>
@@ -111,7 +112,7 @@ builder.Services.AddSwaggerGen(option =>
                     Id = JwtBearerDefaults.AuthenticationScheme
                 }
             },
-            new string[]{ }
+            Array.Empty<string>()
         },
     });
 });

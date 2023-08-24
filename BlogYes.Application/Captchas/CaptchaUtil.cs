@@ -28,7 +28,7 @@ namespace BlogYes.Application.Captchas
             bool noise = false, bool line = false, bool circle = false)
         {
             var random = new Random();
-            if (options is null) throw new Exception("no options was set");
+            if (options is null) throw new ArgumentNullException("no options was set");
             using var image2d = new SKBitmap(options.Width, options.Height, SKColorType.Bgra8888, SKAlphaType.Premul);
             using var canvas = new SKCanvas(image2d);
             

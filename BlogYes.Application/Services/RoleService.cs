@@ -1,6 +1,7 @@
 ﻿using BlogYes.Application.Auth;
 using BlogYes.Application.Dtos;
 using BlogYes.Application.Services.Base;
+using BlogYes.Core.Exceptions;
 using BlogYes.Domain.Entities;
 using BlogYes.Domain.Repositories;
 using BlogYes.Domain.Utilities;
@@ -25,7 +26,7 @@ namespace BlogYes.Application.Services
         {
             if (!RequireScopeUtil.TryFillAll(roleDto.ScopeNames, out var fullScopes))
             {
-                throw new Exception("unsupported scope find");
+                throw new NotAcceptableException("unsupported scope find");
             }
             var role = Mapper.Map<Role>(roleDto);
             role.Scopes = fullScopes;
@@ -61,10 +62,10 @@ namespace BlogYes.Application.Services
         {
             if (!RequireScopeUtil.TryFillAll(scopes, out var fullScopes))
             {
-                throw new Exception("unsupported scope find");
+                throw new NotAcceptableException("unsupported scope find");
             }
             var role = (await _roleRepository.FindAsync(roleId)) ??
-                throw new Exception("role is not exist");
+                throw new NotFoundException("role is not exist");
             role.Scopes = fullScopes;
             return await _roleRepository.UpdateAsync(role);
         }

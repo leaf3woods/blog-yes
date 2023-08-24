@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace BlogYes.Core
 {
@@ -8,6 +9,7 @@ namespace BlogYes.Core
         {
             AllowTrailingCommas = true,
             PropertyNameCaseInsensitive = false,
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
         };
     }
 }

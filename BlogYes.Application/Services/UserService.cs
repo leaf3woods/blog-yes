@@ -5,6 +5,7 @@ using BlogYes.Application.Dtos;
 using BlogYes.Application.Services.Base;
 using BlogYes.Application.Utilities;
 using BlogYes.Core;
+using BlogYes.Core.Exceptions;
 using BlogYes.Core.Utilities;
 using BlogYes.Domain.Entities;
 using BlogYes.Domain.Repositories;
@@ -47,14 +48,14 @@ namespace BlogYes.Application.Services
             if(!SettingUtil.IsDevelopment
                 && !await _loginService.VerifyCaptchaAnswerAsync(answer))
             {
-                throw new Exception("captcha not correct");
+                throw new NotAcceptableException("captcha not correct");
             }
             var user = await _userRepository.FindAsync(credential.Username);
             var bytes = Convert.FromBase64String(credential.Password);
 
             if (user is null || !user.Verify(bytes))
             {
-                throw new Exception("user not exist or password error");
+                throw new NotAcceptableException("user not exist or password error");
             }
             var token = CryptoUtil.GenerateJwtToken(SettingUtil.Jwt.Issuer, SettingUtil.Jwt.Audience, SettingUtil.Jwt.ExpireMin,
                 new Claim(CustomClaimsType.UserId, user.Id.ToString()), new Claim(CustomClaimsType.RoleId, user.Role.Id.ToString())) ??
@@ -62,7 +63,7 @@ namespace BlogYes.Application.Services
 
             if (!await _loginService.VerifyTokenAsync(user.Id, token))
             {
-                throw new Exception("user is logged in elsewhere");
+                throw new ForbiddenException("user is logged in elsewhere");
             }
             await _loginService.CacheTokenAsync(user.Id, token);
             return token;
@@ -94,9 +95,9 @@ namespace BlogYes.Application.Services
         public async Task<UserReadDto?> ChangeRoleAsync(Guid userId, Guid roleId)
         {
             var user = (await _userRepository.FindAsync(userId)) ??
-                throw new Exception("user not find");
+                throw new NotFoundException("user not find");
             if(await _roleRepository.FindAsync(roleId) is null)
-                throw new Exception("role not find");
+                throw new NotFoundException("role not find");
             user.RoleId = roleId;
             var count = await _userRepository.UpdateAsync(user);
             return count == 0 ? null : Mapper.Map<UserReadDto>(user);
