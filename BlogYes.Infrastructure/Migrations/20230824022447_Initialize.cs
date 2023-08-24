@@ -208,7 +208,12 @@ namespace BlogYes.Infrastructure.Migrations
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "DeleteTime", "DisplayName", "Email", "Passphrase", "RegisterTime", "RoleId", "Salt", "SoftDeleted", "TelephoneNumber", "Username" },
-                values: new object[] { new Guid("b6770d16-0ff0-436d-a4fd-ea18df643eae"), null, "developer", "unknow", "Uh+8E9ft9jptdMzAVRKo0UYQtqn5epsbJUZQGbL/Xhk=", new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new Guid("e8df3280-8ab1-4b45-8d6a-6c3e669317ac"), "5+fPPv0FShtKo3ed746TiuNojEZsxuPkhbU+YvF5DuQ=", false, "unknow", "dev" });
+                values: new object[,]
+                {
+                    { new Guid("157ad2cf-0058-47ea-9bf7-1cda6a8e3cc7"), null, "initial-admin", "unknow", "Lc8DL5jIpDxDfsDp6gYk2HjVIEzXZ30MJc5eW6OU6ko=", new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new Guid("e1f23f37-919c-453b-aff1-1214415e54b8"), "JO3wh7gOTUQ5cBydCoQqnazvw5dgRoVQkNpdrIAvVgI=", false, "unknow", "admin" },
+                    { new Guid("69af89cf-1e1a-4ccb-867f-c5eb411e0e15"), null, "initial-super", "unknow", "WSAcdSAvzQFUq3iXLWXLmcuPmWHIjE8ffSBTVjJVBPQ=", new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new Guid("4fe6ebb8-5001-40b4-a59e-d193ad9186f8"), "aY68cuKZh+LNfYczaGclgtTOYy34yvl1O/H9IX3bBtU=", false, "unknow", "super" },
+                    { new Guid("b74c33d5-1464-44a9-9254-522656f0a51e"), null, "initial-developer", "unknow", "Uh+8E9ft9jptdMzAVRKo0UYQtqn5epsbJUZQGbL/Xhk=", new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc), new Guid("e8df3280-8ab1-4b45-8d6a-6c3e669317ac"), "5+fPPv0FShtKo3ed746TiuNojEZsxuPkhbU+YvF5DuQ=", false, "unknow", "developer" }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Blogs_CategoryId",

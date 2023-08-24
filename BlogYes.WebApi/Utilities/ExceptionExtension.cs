@@ -21,7 +21,7 @@ namespace BlogYes.WebApi.Exceptions
             if (!SettingUtil.IsDevelopment)
             {
                 var index = result.Message.IndexOf('\r');
-                result.Message = result.Message[..index];
+                result.Message = index == -1 ? result.Message : result.Message[..index];
                 result.StackTrace = null;
                 result.Inner = null;
             }

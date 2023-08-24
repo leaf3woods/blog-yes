@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BlogYes.Infrastructure.Migrations
 {
     [DbContext(typeof(PgDbContext))]
-    [Migration("20230822123332_Initialize")]
+    [Migration("20230824022447_Initialize")]
     partial class Initialize
     {
         /// <inheritdoc />
@@ -337,8 +337,8 @@ namespace BlogYes.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("b6770d16-0ff0-436d-a4fd-ea18df643eae"),
-                            DisplayName = "developer",
+                            Id = new Guid("b74c33d5-1464-44a9-9254-522656f0a51e"),
+                            DisplayName = "initial-developer",
                             Email = "unknow",
                             Passphrase = "Uh+8E9ft9jptdMzAVRKo0UYQtqn5epsbJUZQGbL/Xhk=",
                             RegisterTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
@@ -346,7 +346,33 @@ namespace BlogYes.Infrastructure.Migrations
                             Salt = "5+fPPv0FShtKo3ed746TiuNojEZsxuPkhbU+YvF5DuQ=",
                             SoftDeleted = false,
                             TelephoneNumber = "unknow",
-                            Username = "dev"
+                            Username = "developer"
+                        },
+                        new
+                        {
+                            Id = new Guid("69af89cf-1e1a-4ccb-867f-c5eb411e0e15"),
+                            DisplayName = "initial-super",
+                            Email = "unknow",
+                            Passphrase = "WSAcdSAvzQFUq3iXLWXLmcuPmWHIjE8ffSBTVjJVBPQ=",
+                            RegisterTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            RoleId = new Guid("4fe6ebb8-5001-40b4-a59e-d193ad9186f8"),
+                            Salt = "aY68cuKZh+LNfYczaGclgtTOYy34yvl1O/H9IX3bBtU=",
+                            SoftDeleted = false,
+                            TelephoneNumber = "unknow",
+                            Username = "super"
+                        },
+                        new
+                        {
+                            Id = new Guid("157ad2cf-0058-47ea-9bf7-1cda6a8e3cc7"),
+                            DisplayName = "initial-admin",
+                            Email = "unknow",
+                            Passphrase = "Lc8DL5jIpDxDfsDp6gYk2HjVIEzXZ30MJc5eW6OU6ko=",
+                            RegisterTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc),
+                            RoleId = new Guid("e1f23f37-919c-453b-aff1-1214415e54b8"),
+                            Salt = "JO3wh7gOTUQ5cBydCoQqnazvw5dgRoVQkNpdrIAvVgI=",
+                            SoftDeleted = false,
+                            TelephoneNumber = "unknow",
+                            Username = "admin"
                         });
                 });
 

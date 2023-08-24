@@ -33,10 +33,10 @@ namespace BlogYes.Domain.Entities
 
         public readonly static User DevUser = new()
         {
-            Username = "dev",
+            Username = "developer",
             Passphrase = "Uh+8E9ft9jptdMzAVRKo0UYQtqn5epsbJUZQGbL/Xhk=",
             Salt = "5+fPPv0FShtKo3ed746TiuNojEZsxuPkhbU+YvF5DuQ=",
-            DisplayName = "developer",
+            DisplayName = "initial-developer",
             Email = "unknow",
             TelephoneNumber = "unknow",
             RegisterTime = DateTime.UnixEpoch,
@@ -46,18 +46,30 @@ namespace BlogYes.Domain.Entities
         public readonly static User SuperUser = new()
         {
             Username = "super",
-            Passphrase = "Uh+8E9ft9jptdMzAVRKo0UYQtqn5epsbJUZQGbL/Xhk=",
-            Salt = "5+fPPv0FShtKo3ed746TiuNojEZsxuPkhbU+YvF5DuQ=",
-            DisplayName = "super",
+            Passphrase = "WSAcdSAvzQFUq3iXLWXLmcuPmWHIjE8ffSBTVjJVBPQ=",
+            Salt = "aY68cuKZh+LNfYczaGclgtTOYy34yvl1O/H9IX3bBtU=",
+            DisplayName = "initial-super",
             Email = "unknow",
             TelephoneNumber = "unknow",
             RegisterTime = DateTime.UnixEpoch,
             RoleId = Role.SuperRole.Id,
         };
 
+        public readonly static User AdminUser = new()
+        {
+            Username = "admin",
+            Passphrase = "Lc8DL5jIpDxDfsDp6gYk2HjVIEzXZ30MJc5eW6OU6ko=",
+            Salt = "JO3wh7gOTUQ5cBydCoQqnazvw5dgRoVQkNpdrIAvVgI=",
+            DisplayName = "initial-admin",
+            Email = "unknow",
+            TelephoneNumber = "unknow",
+            RegisterTime = DateTime.UnixEpoch,
+            RoleId = Role.AdminRole.Id,
+        };
+
         public static User[] Seeds { get; } = new User[]
         {
-            DevUser
+            DevUser, SuperUser, AdminUser
         };
     }
 }

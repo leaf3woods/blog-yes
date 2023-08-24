@@ -46,9 +46,9 @@ namespace BlogYes.Application.Services
             var answer = Mapper.Map<Captcha>(credential.Captcha);
 
             if(!SettingUtil.IsDevelopment
-                && !await _loginService.VerifyCaptchaAnswerAsync(answer))
+                && (answer is null || !await _loginService.VerifyCaptchaAnswerAsync(answer)))
             {
-                throw new NotAcceptableException("captcha not correct");
+                throw new NotAcceptableException("captcha not exist or not correct");
             }
             var user = await _userRepository.FindAsync(credential.Username);
             var bytes = Convert.FromBase64String(credential.Password);

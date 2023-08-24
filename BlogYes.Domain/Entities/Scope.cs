@@ -15,7 +15,7 @@ namespace BlogYes.Domain.Entities
 
         #endregion navigation
 
-        public static Scope FromString(string scopeName) => new Scope { Name = scopeName };
+        public static Scope FromString(string scopeName) => new() { Name = scopeName };
 
         public static Scope[] Seeds { get; } = new Scope[]
         {
