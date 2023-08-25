@@ -43,16 +43,16 @@ namespace BlogYes.WebApi.Controllers
             (await _userService.GetUserAsync(userId)).Wrap();
 
         /// <summary>
-        ///     获取所有用户
+        ///     模糊匹配用户名和昵称
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [Route("all")]
+        [Route("where")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [Authorize(Policy = $"{ManagedResource.User}.{ManagedAction.Read}.{ManagedItem.All}")]
-        public async Task<ResponseWrapper<IEnumerable<UserReadDto>>> GetUsers() =>
-            (await _userService.GetUsersAsync()).Wrap();
+        public async Task<ResponseWrapper<IEnumerable<UserReadDto>>> GetUsers(string? name = null) =>
+            (await _userService.GetUsersWhereAsync(name)).Wrap();
 
         /// <summary>
         ///     删除用户

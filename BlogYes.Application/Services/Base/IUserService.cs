@@ -14,7 +14,7 @@ namespace BlogYes.Application.Services.Base
 
         public Task<UserReadDto?> GetUserAsync(Guid id);
 
-        public Task<IEnumerable<UserReadDto>> GetUsersAsync();
+        public Task<IEnumerable<UserReadDto>> GetUsersWhereAsync(string? username = null);
 
         public Task<UserReadDto?> ChangeRoleAsync(Guid userId, Guid roleId);
 

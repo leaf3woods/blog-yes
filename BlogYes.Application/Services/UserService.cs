@@ -99,10 +99,14 @@ namespace BlogYes.Application.Services
             return result;
         }
 
-        [Scope("get all users", ManagedResource.User, ManagedAction.Read, ManagedItem.All)]
-        public async Task<IEnumerable<UserReadDto>> GetUsersAsync()
+        [Scope("get users where", ManagedResource.User, ManagedAction.Read, ManagedItem.All)]
+        public async Task<IEnumerable<UserReadDto>> GetUsersWhereAsync(string? name = null)
         {
-            var users = await _userRepository.GetQueryWhere().Include(u => u.Role).ToArrayAsync();
+            var users = await _userRepository
+                .GetQueryWhere(string.IsNullOrEmpty(name) ? null : 
+                u => u.Username.Contains(name) || u.DisplayName.Contains(name))
+                .Include(u => u.Role)
+                .ToArrayAsync();
             var results = Mapper.Map<IEnumerable<UserReadDto>>(users);
             return results;
         }

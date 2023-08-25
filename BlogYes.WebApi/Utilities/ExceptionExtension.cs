@@ -10,18 +10,18 @@ namespace BlogYes.WebApi.Exceptions
         {
             var result = exception switch
             {
-                NotFoundException or NotAcceptableException or ForbiddenException => new ExceptionReadDto() { Message = string.Format(exception.Message) },
+                NotFoundException or NotAcceptableException or ForbiddenException => new ExceptionReadDto() { Info = string.Format(exception.Message) },
                 _ => new ExceptionReadDto
                 {
-                    Message = exception.Message,
+                    Info = exception.Message,
                     StackTrace = exception.StackTrace,
                     Inner = exception.InnerException?.Message
                 }
             };
             if (!SettingUtil.IsDevelopment)
             {
-                var index = result.Message.IndexOf('\r');
-                result.Message = index == -1 ? result.Message : result.Message[..index];
+                var index = result.Info.IndexOf('\r');
+                result.Info = index == -1 ? result.Info : result.Info[..index];
                 result.StackTrace = null;
                 result.Inner = null;
             }
