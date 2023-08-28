@@ -1,12 +1,12 @@
 ﻿namespace BlogYes.Core.Exceptions
 {
-    public class ForbiddenException : Exception
+    public class ForbiddenException : CustomException
     {
-        public ForbiddenException(string exceptionCode) : base(exceptionCode)
+        public ForbiddenException(string exceptionCode, params object?[] param) : base(exceptionCode)
         {
-            ExceptionCode = exceptionCode;
+            ExceptionCode = string.Format(exceptionCode, param);
         }
 
-        public string ExceptionCode { get; private set; }
+        public override string ExceptionCode { get; protected set; }
     }
 }

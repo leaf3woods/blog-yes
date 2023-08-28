@@ -20,5 +20,7 @@ namespace BlogYes.Application.Services.Base
 
         public Task<CaptchaReadDto> GenerateCaptchaAsync();
 
+        public Task<int> ChangePasswordAsync();
+
     }
 }

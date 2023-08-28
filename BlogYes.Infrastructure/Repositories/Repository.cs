@@ -60,5 +60,11 @@ namespace BlogYes.Infrastructure.Repositories
                 .ToPaginatedListAsync(pageIndex, pageSize);
             return results;
         }
+
+        public async Task<int> Update(TEntity entity)
+        {
+            DbContext.Set<TEntity>().Update(entity);
+            return await DbContext.SaveChangesAsync();
+        }
     }
 }

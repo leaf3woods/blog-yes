@@ -1,13 +1,13 @@
 ﻿
 namespace BlogYes.Core.Exceptions
 {
-    public class NotFoundException : Exception
+    public class NotFoundException : CustomException
     {
-        public NotFoundException(string exceptionCode) : base(exceptionCode) 
+        public NotFoundException(string exceptionCode, params object?[] param) : base(exceptionCode)
         {
-            ExceptionCode = exceptionCode;
+            ExceptionCode = string.Format(exceptionCode, param);
         }
 
-        public string ExceptionCode { get; private set; }
+        public override string ExceptionCode { get; protected set; }
     }
 }

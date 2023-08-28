@@ -57,7 +57,7 @@ namespace BlogYes.Application.Auth.AuthHandler
                 return;
             }
 
-            if (role.Scopes.Any(s => requirement.Scope.StartsWith(s.Name)))
+            if (role.Scopes.Any(s => requirement.Scope.Contains(s.Name)))
             {
                 _logger.LogInformation("scope match success");
                 context.Succeed(requirement);

@@ -14,5 +14,8 @@ namespace BlogYes.Domain.Repositories
         public IQueryable<TEntity> GetQueryWhere(Expression<Func<TEntity, bool>>? expression = null, bool track = true);
 
         public Task<PaginatedList<TEntity>> GetPaginatedAsync(int pageIndex, int pageSize);
+
+        public Task<int> Update(TEntity entity);
+
     }
 }

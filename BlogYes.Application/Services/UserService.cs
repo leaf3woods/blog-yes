@@ -138,5 +138,11 @@ namespace BlogYes.Application.Services
             await _loginService.CacheCaptchaAnswerAsync(captcha, 180);
             return Mapper.Map<CaptchaReadDto>(captcha);
         }
+
+        public Task<int> ChangePasswordAsync()
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

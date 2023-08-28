@@ -1,13 +1,13 @@
 ﻿
 namespace BlogYes.Core.Exceptions
 {
-    public class NotAcceptableException : Exception
+    public class NotAcceptableException : CustomException
     {
-        public NotAcceptableException(string exceptionCode) : base(exceptionCode)
+        public NotAcceptableException(string exceptionCode, params object?[] param) : base(exceptionCode)
         {
-            ExceptionCode = exceptionCode;
+            ExceptionCode = string.Format(exceptionCode, param);
         }
 
-        public string ExceptionCode { get; private set; }
+        public override string ExceptionCode { get; protected set; }
     }
 }

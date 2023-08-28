@@ -68,6 +68,8 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+builder.Services.AddLocalization();
+
 builder.Services.AddAuthorization(options =>
     options.AddPolicyExt(RequireScopeUtil.Scopes)
 );
